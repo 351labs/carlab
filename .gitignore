@@ -1,0 +1,17 @@
+node_modules/
+dist/
+output/
+.cloudflare/
+native/target/
+native/dist/
+api/dist/
+*.tgz
+*.log
+.env
+.env.*
+!.env.example
+.DS_Store
+public/build.json
+public/licenses/
+public/THIRD_PARTY_NOTICES.md
+native/THIRD_PARTY_NOTICES.md

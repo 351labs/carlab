@@ -1,0 +1,8 @@
+{
+ "compilerOptions": {
+  "target":"ES2022","lib":["ES2024","DOM"],"module":"NodeNext","moduleResolution":"NodeNext",
+  "strict":true,"skipLibCheck":true,"verbatimModuleSyntax":true,"declaration":true,
+  "rootDir":".","outDir":"dist","types":[]
+ },
+ "include":["index.ts","types.ts"]
+}

@@ -1,0 +1,845 @@
+{
+ "schema": "carlab-mazda-split-1",
+ "id": "mazda-e0-model3-split-1",
+ "fixture": "mazda-measured-all.json",
+ "fixtureSha256": "93076ac2d745a9cc89e36a55fec56a8fcd11f69ad73ba732a32c024c9eaadafd",
+ "frozenBeforeAnyModel3Fit": true,
+ "rule": "Band = nominal speed in 1000/1250/1500/1750/2000/2500/3000/3500/4000/4500 within +/-30 rpm of measured Speed; otherwise 'below-1000' (<970 rpm) or 'off-grid'. Training/development = every row in the 1500/2000/3000/4500 rpm bands, which contain all 12 previously inspected rows. Holdout = every other row. Selection uses measured RPM only.",
+ "trainingBands": [
+  "1500",
+  "2000",
+  "3000",
+  "4500"
+ ],
+ "developmentVisible": "The 12 original rows were inspected with model outputs (the recorded baseline); their four complete bands are therefore development/training data, never holdout.",
+ "disclosure": "All 137 raw source rows (inputs and measured outputs) were printed once to establish band structure and the cam-channel sign convention before this split was frozen. No model output had been computed for any holdout row.",
+ "holdoutLimits": "Holdout bands are complete separate sweeps from the same engine, cell and session package, not an independent engine or campaign. 1750/2500/3500/4000 rpm lie between training bands (interpolation in speed); below-1000/1000/1250 lie below them (extrapolation).",
+ "trainingRows": [
+  47,
+  48,
+  49,
+  50,
+  51,
+  52,
+  53,
+  54,
+  55,
+  56,
+  57,
+  58,
+  59,
+  80,
+  81,
+  82,
+  83,
+  84,
+  85,
+  86,
+  87,
+  88,
+  89,
+  90,
+  91,
+  92,
+  93,
+  94,
+  95,
+  108,
+  109,
+  110,
+  111,
+  112,
+  113,
+  114,
+  115,
+  134,
+  135,
+  136,
+  137,
+  138,
+  139,
+  140,
+  141,
+  142
+ ],
+ "holdoutRows": [
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15,
+  16,
+  17,
+  18,
+  19,
+  20,
+  21,
+  22,
+  23,
+  24,
+  25,
+  26,
+  27,
+  28,
+  29,
+  30,
+  31,
+  32,
+  33,
+  34,
+  35,
+  36,
+  37,
+  38,
+  39,
+  40,
+  41,
+  42,
+  43,
+  44,
+  45,
+  46,
+  60,
+  61,
+  62,
+  63,
+  64,
+  65,
+  66,
+  67,
+  68,
+  69,
+  70,
+  71,
+  72,
+  73,
+  74,
+  75,
+  76,
+  77,
+  78,
+  79,
+  96,
+  97,
+  98,
+  99,
+  100,
+  101,
+  102,
+  103,
+  104,
+  105,
+  106,
+  107,
+  116,
+  117,
+  118,
+  119,
+  120,
+  121,
+  122,
+  123,
+  124,
+  125,
+  126,
+  127,
+  128,
+  129,
+  130,
+  131,
+  132,
+  133
+ ],
+ "rows": [
+  {
+   "excelRow": 6,
+   "rpm": 714.7666667,
+   "band": "below-1000"
+  },
+  {
+   "excelRow": 7,
+   "rpm": 847.6,
+   "band": "below-1000"
+  },
+  {
+   "excelRow": 8,
+   "rpm": 767.234375,
+   "band": "below-1000"
+  },
+  {
+   "excelRow": 9,
+   "rpm": 847.4794521,
+   "band": "below-1000"
+  },
+  {
+   "excelRow": 10,
+   "rpm": 847.4166667,
+   "band": "below-1000"
+  },
+  {
+   "excelRow": 11,
+   "rpm": 847.028169,
+   "band": "below-1000"
+  },
+  {
+   "excelRow": 12,
+   "rpm": 846.8028169,
+   "band": "below-1000"
+  },
+  {
+   "excelRow": 13,
+   "rpm": 846.7887324,
+   "band": "below-1000"
+  },
+  {
+   "excelRow": 14,
+   "rpm": 922.325,
+   "band": "below-1000"
+  },
+  {
+   "excelRow": 15,
+   "rpm": 922.4102564,
+   "band": "below-1000"
+  },
+  {
+   "excelRow": 16,
+   "rpm": 922.4,
+   "band": "below-1000"
+  },
+  {
+   "excelRow": 17,
+   "rpm": 923.6753247,
+   "band": "below-1000"
+  },
+  {
+   "excelRow": 18,
+   "rpm": 923.2467532,
+   "band": "below-1000"
+  },
+  {
+   "excelRow": 19,
+   "rpm": 997.195122,
+   "band": "1000"
+  },
+  {
+   "excelRow": 20,
+   "rpm": 997.9176471,
+   "band": "1000"
+  },
+  {
+   "excelRow": 21,
+   "rpm": 998.2738095,
+   "band": "1000"
+  },
+  {
+   "excelRow": 22,
+   "rpm": 998.6506024,
+   "band": "1000"
+  },
+  {
+   "excelRow": 23,
+   "rpm": 998.373494,
+   "band": "1000"
+  },
+  {
+   "excelRow": 24,
+   "rpm": 998.4819277,
+   "band": "1000"
+  },
+  {
+   "excelRow": 25,
+   "rpm": 998.25,
+   "band": "1000"
+  },
+  {
+   "excelRow": 26,
+   "rpm": 998.9761905,
+   "band": "1000"
+  },
+  {
+   "excelRow": 27,
+   "rpm": 998.5180723,
+   "band": "1000"
+  },
+  {
+   "excelRow": 28,
+   "rpm": 998.8870968,
+   "band": "1000"
+  },
+  {
+   "excelRow": 29,
+   "rpm": 999.8390805,
+   "band": "1000"
+  },
+  {
+   "excelRow": 30,
+   "rpm": 998.2168675,
+   "band": "1000"
+  },
+  {
+   "excelRow": 31,
+   "rpm": 1247.076923,
+   "band": "1250"
+  },
+  {
+   "excelRow": 32,
+   "rpm": 1247.257143,
+   "band": "1250"
+  },
+  {
+   "excelRow": 33,
+   "rpm": 1246.718447,
+   "band": "1250"
+  },
+  {
+   "excelRow": 34,
+   "rpm": 1247.028846,
+   "band": "1250"
+  },
+  {
+   "excelRow": 35,
+   "rpm": 1246.355769,
+   "band": "1250"
+  },
+  {
+   "excelRow": 36,
+   "rpm": 1247.067308,
+   "band": "1250"
+  },
+  {
+   "excelRow": 37,
+   "rpm": 1246.615385,
+   "band": "1250"
+  },
+  {
+   "excelRow": 38,
+   "rpm": 1246.442308,
+   "band": "1250"
+  },
+  {
+   "excelRow": 39,
+   "rpm": 1246.866667,
+   "band": "1250"
+  },
+  {
+   "excelRow": 40,
+   "rpm": 1246.238095,
+   "band": "1250"
+  },
+  {
+   "excelRow": 41,
+   "rpm": 1246.269231,
+   "band": "1250"
+  },
+  {
+   "excelRow": 42,
+   "rpm": 1246.644231,
+   "band": "1250"
+  },
+  {
+   "excelRow": 43,
+   "rpm": 1246.019048,
+   "band": "1250"
+  },
+  {
+   "excelRow": 44,
+   "rpm": 1245.721154,
+   "band": "1250"
+  },
+  {
+   "excelRow": 45,
+   "rpm": 1245.788462,
+   "band": "1250"
+  },
+  {
+   "excelRow": 46,
+   "rpm": 1341.053571,
+   "band": "off-grid"
+  },
+  {
+   "excelRow": 47,
+   "rpm": 1497.388889,
+   "band": "1500"
+  },
+  {
+   "excelRow": 48,
+   "rpm": 1497.15873,
+   "band": "1500"
+  },
+  {
+   "excelRow": 49,
+   "rpm": 1497.150794,
+   "band": "1500"
+  },
+  {
+   "excelRow": 50,
+   "rpm": 1497.152,
+   "band": "1500"
+  },
+  {
+   "excelRow": 51,
+   "rpm": 1509.133858,
+   "band": "1500"
+  },
+  {
+   "excelRow": 52,
+   "rpm": 1497.269841,
+   "band": "1500"
+  },
+  {
+   "excelRow": 53,
+   "rpm": 1497.185484,
+   "band": "1500"
+  },
+  {
+   "excelRow": 54,
+   "rpm": 1497.150794,
+   "band": "1500"
+  },
+  {
+   "excelRow": 55,
+   "rpm": 1497.357143,
+   "band": "1500"
+  },
+  {
+   "excelRow": 56,
+   "rpm": 1497.104,
+   "band": "1500"
+  },
+  {
+   "excelRow": 57,
+   "rpm": 1496.872,
+   "band": "1500"
+  },
+  {
+   "excelRow": 58,
+   "rpm": 1496.256,
+   "band": "1500"
+  },
+  {
+   "excelRow": 59,
+   "rpm": 1497.145161,
+   "band": "1500"
+  },
+  {
+   "excelRow": 60,
+   "rpm": 1628.742647,
+   "band": "off-grid"
+  },
+  {
+   "excelRow": 61,
+   "rpm": 1746.931034,
+   "band": "1750"
+  },
+  {
+   "excelRow": 62,
+   "rpm": 1746.810458,
+   "band": "1750"
+  },
+  {
+   "excelRow": 63,
+   "rpm": 1746.763889,
+   "band": "1750"
+  },
+  {
+   "excelRow": 64,
+   "rpm": 1747.013605,
+   "band": "1750"
+  },
+  {
+   "excelRow": 65,
+   "rpm": 1746.937931,
+   "band": "1750"
+  },
+  {
+   "excelRow": 66,
+   "rpm": 1746.746575,
+   "band": "1750"
+  },
+  {
+   "excelRow": 67,
+   "rpm": 1746.678082,
+   "band": "1750"
+  },
+  {
+   "excelRow": 68,
+   "rpm": 1746.917808,
+   "band": "1750"
+  },
+  {
+   "excelRow": 69,
+   "rpm": 1746.863014,
+   "band": "1750"
+  },
+  {
+   "excelRow": 70,
+   "rpm": 1746.97931,
+   "band": "1750"
+  },
+  {
+   "excelRow": 71,
+   "rpm": 1746.965517,
+   "band": "1750"
+  },
+  {
+   "excelRow": 72,
+   "rpm": 1747,
+   "band": "1750"
+  },
+  {
+   "excelRow": 73,
+   "rpm": 1652.862319,
+   "band": "off-grid"
+  },
+  {
+   "excelRow": 74,
+   "rpm": 1746.857143,
+   "band": "1750"
+  },
+  {
+   "excelRow": 75,
+   "rpm": 1746.862069,
+   "band": "1750"
+  },
+  {
+   "excelRow": 76,
+   "rpm": 1746.671233,
+   "band": "1750"
+  },
+  {
+   "excelRow": 77,
+   "rpm": 1746.767123,
+   "band": "1750"
+  },
+  {
+   "excelRow": 78,
+   "rpm": 1746.958904,
+   "band": "1750"
+  },
+  {
+   "excelRow": 79,
+   "rpm": 1869.120253,
+   "band": "off-grid"
+  },
+  {
+   "excelRow": 80,
+   "rpm": 1996.227545,
+   "band": "2000"
+  },
+  {
+   "excelRow": 81,
+   "rpm": 1996.572289,
+   "band": "2000"
+  },
+  {
+   "excelRow": 82,
+   "rpm": 1996.347305,
+   "band": "2000"
+  },
+  {
+   "excelRow": 83,
+   "rpm": 1996.244048,
+   "band": "2000"
+  },
+  {
+   "excelRow": 84,
+   "rpm": 1996.375,
+   "band": "2000"
+  },
+  {
+   "excelRow": 85,
+   "rpm": 1996.246988,
+   "band": "2000"
+  },
+  {
+   "excelRow": 86,
+   "rpm": 1996.550898,
+   "band": "2000"
+  },
+  {
+   "excelRow": 87,
+   "rpm": 1996.380952,
+   "band": "2000"
+  },
+  {
+   "excelRow": 88,
+   "rpm": 1996.518072,
+   "band": "2000"
+  },
+  {
+   "excelRow": 89,
+   "rpm": 1996.556886,
+   "band": "2000"
+  },
+  {
+   "excelRow": 90,
+   "rpm": 1996.299401,
+   "band": "2000"
+  },
+  {
+   "excelRow": 91,
+   "rpm": 1996.54491,
+   "band": "2000"
+  },
+  {
+   "excelRow": 92,
+   "rpm": 1996.722892,
+   "band": "2000"
+  },
+  {
+   "excelRow": 93,
+   "rpm": 1996.837349,
+   "band": "2000"
+  },
+  {
+   "excelRow": 94,
+   "rpm": 1996.389222,
+   "band": "2000"
+  },
+  {
+   "excelRow": 95,
+   "rpm": 1996.413174,
+   "band": "2000"
+  },
+  {
+   "excelRow": 96,
+   "rpm": 2060.436047,
+   "band": "off-grid"
+  },
+  {
+   "excelRow": 97,
+   "rpm": 2496.120192,
+   "band": "2500"
+  },
+  {
+   "excelRow": 98,
+   "rpm": 2495.754808,
+   "band": "2500"
+  },
+  {
+   "excelRow": 99,
+   "rpm": 2495.591346,
+   "band": "2500"
+  },
+  {
+   "excelRow": 100,
+   "rpm": 2495.684466,
+   "band": "2500"
+  },
+  {
+   "excelRow": 101,
+   "rpm": 2495.521531,
+   "band": "2500"
+  },
+  {
+   "excelRow": 102,
+   "rpm": 2495.12381,
+   "band": "2500"
+  },
+  {
+   "excelRow": 103,
+   "rpm": 2495.293269,
+   "band": "2500"
+  },
+  {
+   "excelRow": 104,
+   "rpm": 2496.028571,
+   "band": "2500"
+  },
+  {
+   "excelRow": 105,
+   "rpm": 2496.408654,
+   "band": "2500"
+  },
+  {
+   "excelRow": 106,
+   "rpm": 2496.133333,
+   "band": "2500"
+  },
+  {
+   "excelRow": 107,
+   "rpm": 2496.495192,
+   "band": "2500"
+  },
+  {
+   "excelRow": 108,
+   "rpm": 2995.666667,
+   "band": "3000"
+  },
+  {
+   "excelRow": 109,
+   "rpm": 2996.068273,
+   "band": "3000"
+  },
+  {
+   "excelRow": 110,
+   "rpm": 2995.710317,
+   "band": "3000"
+  },
+  {
+   "excelRow": 111,
+   "rpm": 2995.7,
+   "band": "3000"
+  },
+  {
+   "excelRow": 112,
+   "rpm": 2995.453815,
+   "band": "3000"
+  },
+  {
+   "excelRow": 113,
+   "rpm": 2995.144578,
+   "band": "3000"
+  },
+  {
+   "excelRow": 114,
+   "rpm": 2995.252,
+   "band": "3000"
+  },
+  {
+   "excelRow": 115,
+   "rpm": 2995.568,
+   "band": "3000"
+  },
+  {
+   "excelRow": 116,
+   "rpm": 3494.653061,
+   "band": "3500"
+  },
+  {
+   "excelRow": 117,
+   "rpm": 3494.772109,
+   "band": "3500"
+  },
+  {
+   "excelRow": 118,
+   "rpm": 3495.041237,
+   "band": "3500"
+  },
+  {
+   "excelRow": 119,
+   "rpm": 3494.726644,
+   "band": "3500"
+  },
+  {
+   "excelRow": 120,
+   "rpm": 3494.860544,
+   "band": "3500"
+  },
+  {
+   "excelRow": 121,
+   "rpm": 3494.907216,
+   "band": "3500"
+  },
+  {
+   "excelRow": 122,
+   "rpm": 3494.695205,
+   "band": "3500"
+  },
+  {
+   "excelRow": 123,
+   "rpm": 3494.793814,
+   "band": "3500"
+  },
+  {
+   "excelRow": 124,
+   "rpm": 3495,
+   "band": "3500"
+  },
+  {
+   "excelRow": 125,
+   "rpm": 3994.264264,
+   "band": "4000"
+  },
+  {
+   "excelRow": 126,
+   "rpm": 3994.486486,
+   "band": "4000"
+  },
+  {
+   "excelRow": 127,
+   "rpm": 3994.490964,
+   "band": "4000"
+  },
+  {
+   "excelRow": 128,
+   "rpm": 3994.557522,
+   "band": "4000"
+  },
+  {
+   "excelRow": 129,
+   "rpm": 3994.433735,
+   "band": "4000"
+  },
+  {
+   "excelRow": 130,
+   "rpm": 3994.336336,
+   "band": "4000"
+  },
+  {
+   "excelRow": 131,
+   "rpm": 3994.51497,
+   "band": "4000"
+  },
+  {
+   "excelRow": 132,
+   "rpm": 3994.342342,
+   "band": "4000"
+  },
+  {
+   "excelRow": 133,
+   "rpm": 3994.423423,
+   "band": "4000"
+  },
+  {
+   "excelRow": 134,
+   "rpm": 4493.955026,
+   "band": "4500"
+  },
+  {
+   "excelRow": 135,
+   "rpm": 4493.885333,
+   "band": "4500"
+  },
+  {
+   "excelRow": 136,
+   "rpm": 4494.368984,
+   "band": "4500"
+  },
+  {
+   "excelRow": 137,
+   "rpm": 4494.314961,
+   "band": "4500"
+  },
+  {
+   "excelRow": 138,
+   "rpm": 4493.402597,
+   "band": "4500"
+  },
+  {
+   "excelRow": 139,
+   "rpm": 4494.037433,
+   "band": "4500"
+  },
+  {
+   "excelRow": 140,
+   "rpm": 4494.100529,
+   "band": "4500"
+  },
+  {
+   "excelRow": 141,
+   "rpm": 4494.085561,
+   "band": "4500"
+  },
+  {
+   "excelRow": 142,
+   "rpm": 4494.256065,
+   "band": "4500"
+  }
+ ]
+}

@@ -1,0 +1,32 @@
+{
+  "name": "carlab",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Independent engine modeling, procedural audio and 3D component laboratory",
+  "license": "UNLICENSED",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 5433",
+    "build": "bash build-native.sh wasm && node api/build.mjs && node scripts/prepare-public.mjs && vite build && node scripts/export-static.mjs",
+    "build:native": "bash build-native.sh all",
+    "build:api": "node api/build.mjs",
+    "typecheck": "tsc --noEmit && tsc -p api/tsconfig.json --noEmit",
+    "test": "node --test '*.test.ts' 'workshop/*.test.ts' 'validation/*.test.mjs' 'api/*.test.ts'",
+    "test:rust": "cargo test --offline --locked --manifest-path native/Cargo.toml",
+    "test:all": "npm test && npm run test:rust",
+    "preview": "vite preview --config preview.config.ts --host 127.0.0.1 --port 5433",
+    "deploy": "cf deploy --prebuilt --mode production"
+  },
+  "dependencies": {
+    "three": "0.186.1"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "2.0.0-beta.v.4",
+    "@types/node": "26.6.5",
+    "@types/three": "0.186.0",
+    "cf": "1.0.0-beta.21",
+    "puppeteer-core": "24.43.1",
+    "typescript": "7.0.2",
+    "vite": "8.3.5"
+  }
+}

@@ -1,0 +1,24 @@
+[package]
+name = "carlab_engine_lab"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[lib]
+crate-type = ["rlib", "cdylib"]
+
+[[bin]]
+name = "carlab-engine"
+path = "src/bin/carlab-engine.rs"
+
+[dependencies]
+serde = { version = "=1.0.228", features = ["derive"] }
+# Control JSON must preserve f64 bits across the native/WASM solver boundary.
+serde_json = { version = "=1.0.145", features = ["float_roundtrip"] }
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

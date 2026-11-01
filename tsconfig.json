@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "ES2024",
+    "lib": [
+      "ES2024",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "types": [
+      "vite/client",
+      "node"
+    ],
+    "strict": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "*.ts",
+    "workshop/**/*.ts",
+    "locales/**/*.ts"
+  ],
+  "exclude": [
+    "**/*.test.ts",
+    "dist",
+    "node_modules",
+    ".cloudflare"
+  ]
+}

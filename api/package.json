@@ -1,0 +1,17 @@
+{
+  "name": "@carlab/engine",
+  "version": "0.7.0",
+  "private": true,
+  "type": "module",
+  "description": "Original Rust engine and procedural audio model with a portable TypeScript/WASM API",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" },
+    "./engine.wasm": "./dist/carlab_engine_lab.wasm",
+    "./package.json": "./package.json"
+  },
+  "files": ["dist", "README.md"],
+  "sideEffects": false,
+  "scripts": { "build": "node build.mjs" }
+}

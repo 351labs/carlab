@@ -1,0 +1,34 @@
+{
+  "scope": "metadata-schema-only",
+  "method": "Schema and model identifiers were renamed; the split fixture hash was recomputed; obsolete run identifiers were removed. Measured point arrays, split membership and legacy numerical cases were not changed. Canonical SHA-256 sorts object keys recursively and uses compact UTF-8 JSON.",
+  "files": {
+    "mazda-measured.json": {
+      "originalSha256": "a549a16ad15c497f4e8d586dc44d4651919ee9633bdbf3cf2b9e4cdebb5f282b",
+      "derivedSha256": "943e551ab5e2de9d6c618ed3f661d97daa10755b7ee820fc739932ca98a32f67",
+      "canonicalDataSha256": "884ef55722d4fafe8ad9be888ee7ab8fcee553bbb248fd2be9cb21f48f234bb7"
+    },
+    "mazda-measured-all.json": {
+      "originalSha256": "a5afd72e44b1355464ba1957d2dffad3d45696597b53747223d67b0a045cf2d4",
+      "derivedSha256": "93076ac2d745a9cc89e36a55fec56a8fcd11f69ad73ba732a32c024c9eaadafd",
+      "canonicalDataSha256": "adc97ae08cf968c0019698971b1fb04226e90715e25c854e5284d2219851ef67"
+    },
+    "mazda-split-model3.json": {
+      "originalSha256": "4fdf9624ef37c8bea1d2d33d15f012d96cab8cf7d47e814db554254807cd5a84",
+      "derivedSha256": "6a9fe0d45eafea4e63e70d9a4c8c8b00e8772497933e5b26b724420107bd4d4e",
+      "canonicalDataSha256": "1c75201f7ae07e26b125c078995c8c9ddc95803ff71f9e0f8200313423926b24"
+    },
+    "legacy-model2-reference.json": {
+      "originalSha256": "0089e37f398b6318586f445ac27638834de7e104b44119a6258e33dd87438e91",
+      "derivedSha256": "ac72d8998ed2f05db251b403dd0815cebbca46ff16e9af5de808836623d3f7bc",
+      "canonicalDataSha256": "b03c679b50785dfd7af1cef1d0a9b782d1ba0cdfae731cb8f1c6941a350dd1fa"
+    },
+    "mazda-protocol.json": {
+      "originalSha256": "90dcfda7e58002571d32a735767a997d165fef66eed89952aff7abdc802a9ef2",
+      "derivedSha256": "5f74138296ac5a36b3f97c3be6dee648ae05c7628e6a3e4df58ff14dd1a619aa"
+    },
+    "mazda-protocol-model3.json": {
+      "originalSha256": "112993e520329b0f5d9b662ee0ea2139b73fefea466e5a0ebc835a5b3c9a9302",
+      "derivedSha256": "c94423892720027591f9ee021a1c93bf2b116005543e94c35fcd20f1d03369a0"
+    }
+  }
+}

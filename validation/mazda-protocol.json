@@ -1,0 +1,89 @@
+{
+  "schema": "carlab-engine-comparison-protocol-1",
+  "id": "mazda-e0-unfitted-1",
+  "question": "How far do the current generic SI plant and the fixed-valve kernel disagree with measured warm Mazda shaft torque and fuel at prescribed measured intake conditions?",
+  "fixture": "mazda-measured.json",
+  "expectedFixtureSchema": "carlab-mazda-measured-steady-1",
+  "engine": {
+    "cylinders": 4,
+    "layout": "inline",
+    "displacement": 1.998,
+    "compression": 13,
+    "boostBar": 0,
+    "idleRpm": 850,
+    "redline": 6800
+  },
+  "physical": {
+    "boreStrokeRatio": 0.9155701754385964,
+    "rodLengthStrokeRatio": 1.7,
+    "airFuelRatio": 14.7,
+    "fuelLhvMJkg": 42.887,
+    "sparkAdvanceDeg": 18,
+    "burnDurationDeg": 50,
+    "combustionEfficiency": 0.96,
+    "gamma": 1.33,
+    "wallTemperatureK": 450,
+    "heatTransferWm2K": 180,
+    "variableHeatCapacity": false,
+    "frictionBaseBar": 0.65,
+    "frictionSpeedBar": 0.045,
+    "ecu": {
+      "enabled": false
+    }
+  },
+  "geometryRoundingToleranceMm": 0.05,
+  "numerics": {
+    "fixedValveStepDeg": 2,
+    "fixedValveSettlingCycles": 3,
+    "maxPeriodicRelativeError": 0.02,
+    "maxMassLedgerResidualKg": 1e-12,
+    "maxEnergyLedgerResidualJ": 1e-08,
+    "settledDiagnosticCycles": 12
+  },
+  "conditions": {
+    "rpm": "measured",
+    "intakePressurePa": "measured absolute MAP",
+    "intakeTemperatureK": "measured intake temperature +273.15",
+    "ambientPressurePa": "measured cell absolute pressure",
+    "exhaustPressurePa": "measured catalyst inlet absolute pressure, used as an explicit exhaust-reservoir proxy; unmeasured upstream header loss omitted",
+    "exhaustTemperatureK": "mean measured cylinder1/2/3/4 exhaust port temperatures +273.15 K, explicit representative reservoir-temperature proxy"
+  },
+  "variants": [
+    "lab-generic-ve",
+    "fixed-valve",
+    "fixed-valve-settled"
+  ],
+  "parameterFit": "none-to-real-data",
+  "heldOutAccuracyClaim": false,
+  "assumptions": [
+    "Generic SI air-standard model conditioned on measured RPM/MAP/IAT, not a complete or identified Mazda digital twin.",
+    "No measured torque, fuel flow, air flow, BSFC, spark or cam phase enters a model input or inverse target.",
+    "The lab-generic-ve variant fits effective intake area only to the lab's original assumed VE surface; it does not fit measured data.",
+    "The fixed-valve variant bypasses inverse VE fitting and keeps the normalized generic valve geometry fixed.",
+    "The current gasoline plant is PFI/equivalent heat, not a DI spray or fuel-chemistry model. ECU is disabled to separate plant disagreement from guessed injector calibration.",
+    "AFR14.7, effective heat-release phase18BTDC, duration50deg, gamma1.33, rod ratio1.7, valves, friction and wall heat transfer are declared generic assumptions.",
+    "Measured coolant/oil temperatures are not gas-wall temperature. The wall remains assumed450K; no substitution of coolant for metal occurs.",
+    "Exhaust reservoir pressure uses catalyst-inlet pressure without unknown upstream header loss. Reservoir temperature uses mean cylinder1/2/3/4 port readings; these sensor proxies do not identify a uniform valve boundary.",
+    "The EPA accessory drive powered only the water pump. Generic FMEP does not identify that exact accessory boundary.",
+    "Brake torque derives from net cylinder work minus FMEP friction; net work already includes pumping. No drivetrain factor or atmospheric torque correction is applied.",
+    "Pressure phasing, knock, emissions, DI transients, acoustics and durability are not validated by this campaign.",
+    "This is an initial unfitted discrepancy measurement. All selected points are evaluation-only; there is no parameter search or claimed train/holdout calibration.",
+    "The fixed-valve-settled diagnostic uses the same physical assumptions with12 rather than3 settling cycles for every selected point; this changes numerical initialization only, without fitting any measured output."
+  ],
+  "admission": [
+    "finite output",
+    "requested inputs not silently normalized",
+    "periodic mass and energy drift <=2%",
+    "ledger residuals within explicit numerical thresholds",
+    "no calibration-map extrapolation",
+    "no optional indicated-efficiency target"
+  ],
+  "metrics": [
+    "torqueNm",
+    "fuelMassFlowGs",
+    "airMassFlowGs",
+    "powerKw",
+    "bsfcGkwh"
+  ],
+  "metricNotes": "Power and BSFC are algebraically derived from torque/speed/fuel and are not independent evidence. MAPE denominators require nonzero positive measured outputs. Invalid rows are retained and excluded with coverage reported; no universal accuracy pass threshold is imposed."
+}

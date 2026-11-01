@@ -1,0 +1,301 @@
+{
+  "schema": "carlab-engine-comparison-protocol-2",
+  "id": "mazda-model3-heldout-1",
+  "question": "Do the model-3 Rust plant options, and a conditional experiment using measured spark/cam/lambda with a small declared fit on training bands, reduce disagreement with measured Mazda shaft torque, fuel-meter flow and inlet air on complete held-out speed bands?",
+  "fixture": "mazda-measured-all.json",
+  "expectedFixtureSchema": "carlab-mazda-measured-steady-all-1",
+  "split": "mazda-split-model3.json",
+  "expectedSplitSchema": "carlab-mazda-split-1",
+  "modelVersion": "carlab-engine-lab-rust-3",
+  "historicalBaseline": {
+    "proof": "../docs/validation-real-engines/proof/mazda-unfitted.json",
+    "variant": "lab-generic-ve",
+    "reproduction": "E0 on the 12 original rows must reproduce the the recorded baseline lab-generic-ve torque, fuel and net-inlet-air predictions within 1e-9 relative (shared cycle; friction now computed by Rust with the same FMEP equation)."
+  },
+  "engine": {
+    "cylinders": 4,
+    "layout": "inline",
+    "displacement": 1.998,
+    "compression": 13,
+    "boostBar": 0,
+    "idleRpm": 850,
+    "redline": 6800
+  },
+  "basePhysical": {
+    "boreStrokeRatio": 0.9155701754385964,
+    "rodLengthStrokeRatio": 1.7,
+    "airFuelRatio": 14.7,
+    "fuelLhvMJkg": 42.887,
+    "sparkAdvanceDeg": 18,
+    "burnDurationDeg": 50,
+    "combustionEfficiency": 0.96,
+    "gamma": 1.33,
+    "wallTemperatureK": 450,
+    "heatTransferWm2K": 180,
+    "variableHeatCapacity": false,
+    "frictionBaseBar": 0.65,
+    "frictionSpeedBar": 0.045,
+    "ecu": {
+      "enabled": false
+    }
+  },
+  "evaluation": {
+    "call": "evaluateEngine(engine, physical, measuredRpm, throttle=1, boostFraction=0, measuredBoundary)",
+    "torque": "Rust EngineEstimate.torqueNm = net cylinder work (pumping included once) minus Rust FMEP friction",
+    "fuel": "Rust fuelMassFlowKgs",
+    "air": "Rust netInletAirMassFlowKgs (forward minus reverse intake-valve flow), compared with the inlet LFE"
+  },
+  "conditions": {
+    "rpm": "measured",
+    "intakePressurePa": "measured absolute MAP",
+    "intakeTemperatureK": "measured intake temperature +273.15",
+    "ambientPressurePa": "measured cell absolute pressure",
+    "exhaustPressurePa": "measured catalyst inlet absolute pressure + exhaustPressureOffsetKpa (0 for every scored experiment)",
+    "exhaustTemperatureK": "mean measured cylinder 1-4 exhaust port temperatures +273.15"
+  },
+  "fuel": {
+    "source": "fixture.fuelAnalysis (ASTM D3343 carbon weight fraction 0.86678, status Reference Only; LHV 42.887 MJ/kg)",
+    "hydrogenCarbonRatio": "((1-c)/c)*(12.011/1.008), assuming C/H only (0 vol% ethanol)",
+    "stoichiometricAfr": "same equation and constants as Rust FuelChemistry::stoich_afr (dry air N2/O2/Ar/CO2); self-checked against the Rust burned-gas equivalence ratio"
+  },
+  "experiments": [
+    {
+      "id": "E0-legacy",
+      "label": "Model-2 physics (legacy defaults), generic assumed VE-map lift fit",
+      "physical": {},
+      "measuredControls": false,
+      "fit": null,
+      "measuredInputs": [
+        "rpm",
+        "MAP",
+        "intake temperature",
+        "cell pressure",
+        "catalyst inlet pressure",
+        "exhaust port temperatures"
+      ]
+    },
+    {
+      "id": "E1-physics-unfitted",
+      "label": "E0 + NASA-7 fixed-composition properties + Woschni heat transfer; no measured controls, no fit",
+      "physical": {
+        "propertyModel": "nasa7-fixed-composition",
+        "heatTransferModel": "woschni",
+        "heatTransferMultiplier": 1,
+        "fuelHydrogenCarbonRatio": "fuel.hydrogenCarbonRatio"
+      },
+      "measuredControls": false,
+      "fit": null,
+      "measuredInputs": [
+        "E0 inputs",
+        "fuel carbon weight fraction (fuel property)"
+      ]
+    },
+    {
+      "id": "E1b-physics-valve-geometry",
+      "label": "E1 with valve-geometry airflow (no lift fit to the generic VE map); no measured controls, no fit",
+      "physical": {
+        "propertyModel": "nasa7-fixed-composition",
+        "heatTransferModel": "woschni",
+        "heatTransferMultiplier": 1,
+        "fuelHydrogenCarbonRatio": "fuel.hydrogenCarbonRatio",
+        "airflowModel": "valve-geometry"
+      },
+      "measuredControls": false,
+      "fit": null,
+      "measuredInputs": [
+        "E1 inputs"
+      ]
+    },
+    {
+      "id": "E2a-conditional-unfitted",
+      "label": "E1 + measured spark, cam phases and lambda; valve-geometry airflow (no VE-map lift fit); base offsets 0",
+      "physical": {
+        "propertyModel": "nasa7-fixed-composition",
+        "heatTransferModel": "woschni",
+        "heatTransferMultiplier": 1,
+        "fuelHydrogenCarbonRatio": "fuel.hydrogenCarbonRatio",
+        "airflowModel": "valve-geometry"
+      },
+      "measuredControls": true,
+      "fit": null,
+      "measuredInputs": [
+        "E1 inputs",
+        "Spark Timing",
+        "Intake Cam Phase",
+        "Exhaust Cam Phase",
+        "Exhaust Lambda"
+      ]
+    },
+    {
+      "id": "E2b-conditional-fitted",
+      "label": "E2a with the declared parameters fitted on training bands only",
+      "physical": "as E2a",
+      "measuredControls": true,
+      "fit": "fit",
+      "measuredInputs": [
+        "E2a inputs",
+        "training-band Inlet Air Flow (stage 1 target)",
+        "training-band Torque (stage 2 target)"
+      ]
+    }
+  ],
+  "measuredControls": {
+    "sparkAdvanceDeg": "Spark Timing (deg BTDC)",
+    "intakeCamRetardDeg": "Intake Cam Phase + intakeCamBaseOffsetDeg (channel sign: + = later, verified from Valve Overlap = exhaust - intake - 24 deg where unclipped; channel zero is unknown, hence the fitted base offset)",
+    "exhaustCamRetardDeg": "Exhaust Cam Phase + exhaustCamBaseOffsetDeg",
+    "airFuelRatio": "Exhaust Lambda * fuel.stoichiometricAfr",
+    "baseValveEvents": "generic lab defaults IVO 710, IVC 220, EVO 500, EVC 10 deg (not Mazda data); the cam retard shifts opening and closing together"
+  },
+  "fit": {
+    "trainingRows": "split.trainingRows (1500/2000/3000/4500 rpm bands, 46 rows incl. the 12 inspected)",
+    "optimizer": "bounded Nelder-Mead on the unit cube (validation/fit.mjs), deterministic start, simplex step 0.1, tolerance 1e-9 relative",
+    "stages": [
+      {
+        "id": "breathing",
+        "target": "airMassFlowGs",
+        "objective": "mean over training rows of ln(predicted/measured)^2; a non-admitted row or non-positive prediction contributes 1.0",
+        "maxEvaluations": 120,
+        "parameters": [
+          {
+            "name": "intakeCamBaseOffsetDeg",
+            "start": 40,
+            "min": -5,
+            "max": 80,
+            "unit": "deg crank"
+          },
+          {
+            "name": "exhaustCamBaseOffsetDeg",
+            "start": 0,
+            "min": -10,
+            "max": 40,
+            "unit": "deg crank"
+          },
+          {
+            "name": "valveDischargeCoefficient",
+            "start": 0.68,
+            "min": 0.4,
+            "max": 0.95,
+            "unit": "-"
+          }
+        ]
+      },
+      {
+        "id": "combustion",
+        "target": "torqueNm",
+        "objective": "mean over training rows of (predicted-measured)^2 in Nm^2; a non-admitted row contributes 2500",
+        "maxEvaluations": 80,
+        "holdsFixed": "breathing result",
+        "parameters": [
+          {
+            "name": "sparkToSocDeg",
+            "start": 0,
+            "min": -10,
+            "max": 40,
+            "unit": "deg crank"
+          },
+          {
+            "name": "burnDurationDeg",
+            "start": 50,
+            "min": 20,
+            "max": 100,
+            "unit": "deg crank"
+          }
+        ]
+      }
+    ],
+    "notFitted": [
+      "friction (FMEP base/speed): not separable from combustion efficiency with steady brake torque alone; oil temperature range too narrow",
+      "heat-transfer multiplier",
+      "combustion efficiency",
+      "intake/exhaust durations and lifts",
+      "DI evaporation (not implemented; not separable from breathing in these data)"
+    ],
+    "frozenBeforeEvaluation": "Every choice in this file is committed before any E2b fit or any holdout row evaluation. Any later change is logged in IMPLEMENTATION.md and relabels the affected split as development."
+  },
+  "diagnostics": {
+    "jacobian": {
+      "at": "E2b fitted parameters, training rows",
+      "observables": [
+        "torqueNm",
+        "fuelMassFlowGs",
+        "airMassFlowGs"
+      ],
+      "assumedSigma": {
+        "torqueNm": "max(0.5 Nm, 1% of reading)",
+        "fuelMassFlowGs": "1% of reading",
+        "airMassFlowGs": "1% of reading (assumed LFE uncertainty, not an EPA statement)"
+      },
+      "parameters": [
+        "intakeCamBaseOffsetDeg",
+        "exhaustCamBaseOffsetDeg",
+        "valveDischargeCoefficient",
+        "sparkToSocDeg",
+        "burnDurationDeg",
+        "frictionBaseBar",
+        "frictionSpeedBar",
+        "heatTransferMultiplier"
+      ],
+      "jacobianBounds": {
+        "frictionBaseBar": [
+          0,
+          2
+        ],
+        "frictionSpeedBar": [
+          0,
+          0.1
+        ],
+        "heatTransferMultiplier": [
+          0.5,
+          2
+        ]
+      },
+      "scaling": "rows divided by sigma; columns multiplied by the parameter bound range; central differences with step 1% of range",
+      "rank": "numerical rank = singular values >= 1e-6 * largest; practically identifiable directions = singular values >= 1 (a full-range move changes the stacked normalized residual by at least one sigma)"
+    },
+    "exhaustPressureSensitivity": {
+      "experiment": "E2b-conditional-fitted (frozen parameters)",
+      "offsetsKpa": [
+        0,
+        5,
+        10
+      ],
+      "purpose": "unmeasured header loss upstream of the catalyst; diagnostic only, never used to choose parameters"
+    }
+  },
+  "admission": [
+    "finite outputs",
+    "requested physical inputs not silently normalized",
+    "boundary reproduced (MAP and exhaust pressure per row; intake/exhaust temperature boundary verified once on the probe cycle config)",
+    "periodic mass and energy drift <= 2%",
+    "mass ledger residual <= 1e-12 kg and energy ledger residual <= 1e-8 J",
+    "no generic VE-map extrapolation (ve-map-fit experiments only; valve-geometry does not use the map as a target)",
+    "no optional indicated-efficiency target",
+    "no cam-event clamping"
+  ],
+  "numerics": {
+    "maxPeriodicRelativeError": 0.02,
+    "maxMassLedgerResidualKg": 1e-12,
+    "maxEnergyLedgerResidualJ": 1e-08
+  },
+  "metrics": [
+    "torqueNm",
+    "fuelMassFlowGs",
+    "airMassFlowGs",
+    "powerKw",
+    "bsfcGkwh"
+  ],
+  "relativeDenominator": {
+    "torqueNm": 5,
+    "powerKw": 0.5,
+    "default": 1e-09,
+    "note": "rows with |measured| below the threshold keep absolute metrics but are excluded from relative metrics; 13 of 137 rows have |torque| < 5 Nm"
+  },
+  "reporting": "Training and holdout metrics separately, per experiment and per speed band; every row retained with predictions, admission reasons and band. Power and BSFC are derived from torque and fuel and are not independent evidence. No accuracy pass threshold is declared.",
+  "assumptions": [
+    "Generic SI plant conditioned on measured boundaries; not an identified Mazda digital twin.",
+    "Holdout bands come from the same engine, cell and session package; they test speed interpolation/extrapolation, not an independent engine or campaign.",
+    "The PFI/equivalent-heat fuel path stays; the Mazda is DI. No charge-cooling or spray model.",
+    "Spark->SOC offset is a single fitted constant, not a predictive ignition-delay model.",
+    "Wall temperature stays the assumed 450 K; coolant/oil temperature is not substituted for gas-side wall temperature."
+  ]
+}
