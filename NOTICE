@@ -1,0 +1,14 @@
+CarLab
+Copyright 2026 351labs and contributors.
+
+CarLab's original code and documentation are licensed under the Apache License,
+Version 2.0. The license text is supplied in LICENSE.
+
+Third-party components, scientific coefficient data, measured reference data and
+reference recordings retain their own copyright, license and data-use terms.
+See credits.md and THIRD_PARTY_NOTICES.md for attribution and scope. In particular,
+the Freesound reference recording is CC BY 3.0, and the NASA coefficient subset
+redistributed through Cantera carries the preserved Cantera BSD-3-Clause notice.
+
+Names of vehicle manufacturers, institutions, researchers and recording authors
+identify cited sources. They do not imply affiliation, certification or endorsement.

@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "description": "Independent engine modeling, procedural audio and 3D component laboratory",
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "scripts": {
     "dev": "vite --host 127.0.0.1 --port 5433",
     "build": "bash build-native.sh wasm && node api/build.mjs && node scripts/prepare-public.mjs && vite build && node scripts/export-static.mjs",

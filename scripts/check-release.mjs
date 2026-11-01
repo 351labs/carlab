@@ -26,8 +26,11 @@ for (const file of manifest.files) {
 const assets = await readdir(resolve(output, 'assets/assets'));
 assert.equal(assets.filter(name => /^index-.*\.js$/.test(name)).length, 1, 'Exactly one current application entry is published.');
 assert.equal(assets.filter(name => name.endsWith('.wasm')).length, 1);
-for (const file of ['THIRD_PARTY_NOTICES.md', 'licenses/three-MIT.txt', 'licenses/rust-and-dependencies.md', 'references/ATTRIBUTION.md']) {
+for (const file of ['LICENSE', 'NOTICE', 'credits.md', 'THIRD_PARTY_NOTICES.md', 'licenses/three-MIT.txt', 'licenses/vite-MIT.md', 'licenses/cantera-BSD-3-Clause.txt', 'licenses/rust-and-dependencies.md', 'references/ATTRIBUTION.md']) {
   assert.ok((await readFile(resolve(output, 'assets', file))).length > 100, file);
+}
+for (const file of ['LICENSE', 'NOTICE', 'credits.md', 'licenses/cantera-BSD-3-Clause.txt']) {
+  assert.deepEqual(await readFile(resolve(output, 'assets', file)), await readFile(resolve(root, file)), `Published ${file} matches its source.`);
 }
 assert.ok((await readdir(resolve(output, 'assets/licenses/rust-stdlib'))).length > 0);
 console.log(JSON.stringify({ worker: worker.name, domain: worker.domains[0], files: manifest.files.length, sourceCommit: build.sourceCommit, wasmSha256: build.wasmSha256, status: 'passed' }));

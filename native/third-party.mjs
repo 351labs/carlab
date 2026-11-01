@@ -86,6 +86,10 @@ export async function generateThirdPartyNotices({output=join(here,'THIRD_PARTY_N
   sections.push(`Cargo target kinds: ${[...new Set(pkg.targets.flatMap(target=>target.kind))].sort().join(', ')}. The following files are copied verbatim from that exact cached package version.\n`);
   for(const file of files){const text=await readFile(file.path,'utf8');sections.push(`### ${file.name}\n`,`SHA-256: \`${hash(text)}\`.\n`,fence(text));}
  }
+ const cantera=await readFile(join(here,'../licenses/cantera-BSD-3-Clause.txt'),'utf8');
+ sections.push('\n## NASA-7 coefficient subset redistributed through Cantera 3.1.0\n',
+  'The seven species in `gas_properties.rs` are derived from Cantera v3.1.0 `data/nasa_gas.yaml` (SHA-256 `4de6199d65d2d3db782e30573720c723130953707336add59713b02d8667e4db`), which credits McBride, Gordon and Reno, NASA TM-4513 (1993). Source: https://github.com/Cantera/cantera/blob/v3.1.0/data/nasa_gas.yaml . This data attribution is additional to the Cargo graph. The Cantera solver is not linked. CarLab uses a seven-species subset, mixture weighting, a high-range enthalpy continuity adjustment and a 298.15 K sensible-energy reference.\n',
+  `Cantera supplied License.txt, SHA-256: \`${hash(cantera)}\`. Upstream: https://github.com/Cantera/cantera/blob/v3.1.0/License.txt .\n`,fence(cantera));
  const rust=await rustNotices();
  sections.push('\n## Rust standard library and toolchain\n',`Toolchain queried: \`${clean(rust.version)}\`.\n`,
   'The Rust standard library’s installed copyright inventory states a general choice of Apache-2.0 or MIT, with exceptions recorded per file/dependency. Its contributors retain copyright. The Cargo table above does not enumerate the compiler-provided standard library. Do not interpret the general dual-licence statement as overriding any exception in the supplied inventory.\n');

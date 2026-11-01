@@ -4,7 +4,7 @@ CarLab is an interactive engine laboratory for exploring engine configuration, v
 
 The mathematical engine and audio core is written in Rust and runs on the CPU, either natively or as WebAssembly. The browser presentation uses 3D graphics; GPU rendering is separate from the CPU simulation. The TypeScript/ESM package [`@carlab/engine`](api/README.md) exposes the Rust/WASM core to other applications.
 
-CarLab is a research and exploration tool. Its default inputs are assumptions, and outputs are conditional on the model and inputs. Calibration to measurements does not by itself establish independent validation. CarLab is not a universally validated digital twin, a safety assessment or a component-life predictor. See [model and limits](docs/model.md) and [research sources](docs/references.md).
+CarLab is a research and exploration tool. Its default inputs are assumptions, and outputs are conditional on the model and inputs. Calibration to measurements does not by itself establish independent validation. CarLab is not a universally validated digital twin, a safety assessment or a component-life predictor. See [model and limits](docs/model.md) and the complete [research and source credits](credits.md).
 
 ## Develop
 
@@ -26,4 +26,4 @@ Production is [carlab.351labs.xyz](https://carlab.351labs.xyz). The independent 
 
 ## Notices
 
-See [third-party notices](THIRD_PARTY_NOTICES.md) and the [sound attribution](public/references/ATTRIBUTION.md). The build generates the Rust dependency and toolchain inventory and includes the full notices with the API and public application. These notices do not grant a licence to CarLab's own code.
+CarLab's original code and documentation are licensed under the [Apache License 2.0](LICENSE). See [NOTICE](NOTICE), [credits.md](credits.md), [third-party notices](THIRD_PARTY_NOTICES.md) and the [sound attribution](public/references/ATTRIBUTION.md). Third-party code, coefficient data, measured data and reference audio retain their own terms. The build includes the Apache license, credits, Cantera notice and generated Rust dependency/toolchain inventory with the API and public application. The source repository remains private while the pre-publication review is in progress.

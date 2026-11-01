@@ -10,9 +10,15 @@ const run=(command,args,cwd)=>{const result=spawnSync(command,args,{cwd,encoding
 try{
  const api=resolve('api'),packageJson=JSON.parse(await readFile(join(api,'package.json'),'utf8'));
  assert.equal(packageJson.dependencies,undefined,'web API has no npm runtime dependencies');
+ assert.equal(packageJson.license,'Apache-2.0');
  run('npm',['pack','--ignore-scripts','--pack-destination',temporary],api);
  const archive=(await readdir(temporary)).find(name=>name.endsWith('.tgz'));assert.ok(archive);
  const consumer=join(temporary,'consumer'),moduleDir=join(consumer,'node_modules','@carlab','engine');await mkdir(moduleDir,{recursive:true});run('tar',['-xzf',join(temporary,archive),'--strip-components=1','-C',moduleDir],consumer);
+ for(const file of ['LICENSE','NOTICE','credits.md','licenses/cantera-BSD-3-Clause.txt']){
+  assert.deepEqual(await readFile(join(moduleDir,'dist',file)),await readFile(resolve(file)),`Packed ${file} matches its source.`);
+ }
+ const notices=await readFile(join(moduleDir,'dist','THIRD_PARTY_NOTICES.md'),'utf8');
+ assert.ok(notices.includes(await readFile(resolve('licenses/cantera-BSD-3-Clause.txt'),'utf8')),'Packed WASM includes the complete Cantera coefficient notice.');
  await writeFile(join(consumer,'package.json'),JSON.stringify({private:true,type:'module'}));
  await writeFile(join(consumer,'consumer.ts'),`import {loadEngineLab,type EngineConfig,type PhysicalConfig} from '@carlab/engine';
 export async function create(wasm:Uint8Array){

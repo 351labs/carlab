@@ -2,7 +2,8 @@
 //!
 //! Species data: NASA-7 polynomials from McBride, Gordon & Reno (1993), NASA
 //! TM-4513, as redistributed in Cantera v3.1.0 `data/nasa_gas.yaml`
-//! (BSD-3, sha256 4de6199d65d2d3db782e30573720c723130953707336add59713b02d8667e4db).
+//! (BSD-3-Clause; full notice in licenses/cantera-BSD-3-Clause.txt at repo root;
+//! sha256 4de6199d65d2d3db782e30573720c723130953707336add59713b02d8667e4db).
 //! Every species below shares the 200-1000-6000 K ranges; outside 200-6000 K the
 //! property set is undefined and callers receive `None` (no extrapolation).
 //! Energies are sensible values referenced to 298.15 K; fuel heat release is

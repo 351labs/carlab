@@ -9,6 +9,9 @@ await rm(resolve(here,'dist'),{recursive:true,force:true});
 const result=spawnSync(resolve(repo,'node_modules/.bin/tsc'),['-p',resolve(here,'tsconfig.json')],{cwd:repo,stdio:'inherit'});
 if(result.error)throw result.error;if(result.status!==0)process.exit(result.status??1);
 await mkdir(resolve(here,'dist'),{recursive:true});await copyFile(wasm,resolve(here,'dist/carlab_engine_lab.wasm'));
+for(const file of ['LICENSE','NOTICE','credits.md'])await copyFile(resolve(repo,file),resolve(here,'dist',file));
+await mkdir(resolve(here,'dist/licenses'),{recursive:true});
+await copyFile(resolve(repo,'licenses/cantera-BSD-3-Clause.txt'),resolve(here,'dist/licenses/cantera-BSD-3-Clause.txt'));
 // Always refresh from the locked graph/toolchain used by this build.
 const notices=await generateThirdPartyNotices({stdlibAssetsDir:resolve(here,'dist/rust-stdlib')});
 await copyFile(notices.output,resolve(here,'dist/THIRD_PARTY_NOTICES.md'));

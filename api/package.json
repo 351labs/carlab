@@ -2,6 +2,7 @@
   "name": "@carlab/engine",
   "version": "0.7.0",
   "private": true,
+  "license": "Apache-2.0",
   "type": "module",
   "description": "Original Rust engine and procedural audio model with a portable TypeScript/WASM API",
   "main": "./dist/index.js",

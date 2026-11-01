@@ -4,6 +4,8 @@ An importable TypeScript/ESM API for the original Rust engine and procedural-aud
 
 The package has no npm runtime dependencies. Its built distribution includes `THIRD_PARTY_NOTICES.md` for the exact locked Cargo packages, their supplied licence texts, and the installed Rust standard-library copyright inventory/licence assets. The build generates this inventory offline; a proc-macro/build dependency in the inventory is not a claim that its code is linked into WASM. Its emitted JavaScript has no imports of the reference TypeScript model, DOM globals or Vite helpers. Public declarations are self-contained in the package. The application supplies the WASM asset, its serving/cache policy and any audio-device integration.
 
+Original CarLab code and documentation are **Apache-2.0**. The packed distribution includes `dist/LICENSE`, `dist/NOTICE` and `dist/credits.md`. The seven NASA species coefficient sets are separately attributed to NASA TM-4513 via Cantera 3.1.0, with its full BSD-3-Clause notice in `dist/licenses/cantera-BSD-3-Clause.txt` and the generated third-party inventory. Reference recordings and measured EPA fixtures are not included in this API package.
+
 ## Build and install
 
 From the CarLab repository, build through the project runner: On a fresh Cargo cache, first run `lm-remote --host local cargo fetch --locked --manifest-path native/Cargo.toml`; subsequent builds use the locked cache offline.

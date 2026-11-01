@@ -1,5 +1,7 @@
 # Research and credits
 
+The complete bibliography, incorporated-data provenance and license boundaries are maintained in the root [credits.md](../credits.md). This page is a short reading guide.
+
 These sources inform the modeling approach and its limitations. A source's experimental results, coefficients or accuracy do not automatically apply to CarLab. Links are references, not permission to reproduce figures, datasets or code; consult each source's terms before reuse. The MIT course includes some third-party figures excluded from its open licence.
 
 ## Engine physics and measurement
@@ -10,7 +12,7 @@ These sources inform the modeling approach and its limitations. A source's exper
 - Ellies, Schenk and Dekraker, US EPA, [engine benchmarking and hardware-in-the-loop operation](https://www.epa.gov/sites/default/files/2016-10/documents/2016-01-1007-benchmark-hil-operat-2014-mazda-skyactiv-2.0l.pdf), SAE 2016-01-1007. A specific measured engine is not a universal calibration.
 - Dekraker et al., US EPA, [combining data into complete engine maps](https://www.epa.gov/vehicle-and-fuel-emissions-testing/combining-data-complete-engine-alpha-maps), SAE 2018-01-1412. Measured and estimated regions need distinct provenance.
 - Sandoval and Heywood, [friction model for spark-ignition engines](https://doi.org/10.4271/2003-01-0725), 2003; Woschni, [instantaneous heat-transfer coefficient](https://doi.org/10.4271/670931), 1967. These identify useful physical structures; published coefficients require their own applicability and reuse review.
-- [Cantera species thermodynamic models](https://cantera.org/stable/reference/thermo/species-thermo.html) describes NASA polynomial representations. CarLab's simplified heat-capacity option is not a NASA coefficient dataset.
+- [Cantera species thermodynamic models](https://cantera.org/stable/reference/thermo/species-thermo.html) explains NASA polynomial representations. The optional Rust `nasa7-fixed-composition` mode incorporates seven species coefficient sets from Cantera v3.1.0 `data/nasa_gas.yaml`, which credits McBride, Gordon and Reno, [NASA TM-4513 (1993)](https://ntrs.nasa.gov/citations/19940013151). Its full [BSD-3-Clause notice](../licenses/cantera-BSD-3-Clause.txt) accompanies distributions; source hashes and model-specific adjustments are in [credits.md](../credits.md). The legacy TypeScript heat-capacity approximation is separate.
 
 ## Validation, materials and audio
 
@@ -24,4 +26,6 @@ These sources inform the modeling approach and its limitations. A source's exper
 
 The listening reference **ferrari340america2.mp3** is by **enginemusic**, sourced from [Freesound](https://freesound.org/people/enginemusic/sounds/43483/) under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/). The linked public preview is unchanged; see the [full attribution](../public/references/ATTRIBUTION.md) for source, transformations and context. It is a listening reference, not a sample in the procedural generator.
 
-Consult [Rust dependency notices](../native/THIRD_PARTY_NOTICES.md), the package distribution notices, and the installed dependencies' own licence files for third-party code. References to research and third-party licences do not grant a licence to CarLab's own code.
+The measured validation fixtures contain extracted numeric rows from the [EPA 2014 Mazda test package](https://www.epa.gov/sites/default/files/2018-04/2014-mazda-2.0l-skyactiv-engine-tier-2-fuel-test-data-package-03-29-18.zip). See [credits.md](../credits.md) for the exact archive identity, extraction scope and document-specific data-use boundary.
+
+CarLab's original code and documentation are [Apache-2.0](../LICENSE). Consult the generated Rust dependency notices included with native/API builds, [third-party notices](../THIRD_PARTY_NOTICES.md), and the installed dependencies' own license files for their separate terms.
