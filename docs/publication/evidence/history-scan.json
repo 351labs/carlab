@@ -1,0 +1,12 @@
+{
+  "sourceCommit": "7d281082763dfe6ec9a0e91abc40214443e1b6d6",
+  "reachableBlobsScanned": 304,
+  "checks": [
+    "private-key",
+    "github-token",
+    "aws-key",
+    "slack-token"
+  ],
+  "findings": [],
+  "scope": "High-confidence credential-pattern scan of reachable Git blobs; binaries not interpreted as text. No matched values emitted. Not a complete security audit."
+}

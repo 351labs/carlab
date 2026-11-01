@@ -1,0 +1,47 @@
+{
+  "runner": "remix-mac2",
+  "purpose": "Functional validation using previously owner-authorized fallback while local runner is paused by memory pressure",
+  "typecheck": "passed",
+  "nodeTests": 165,
+  "rustTests": 130,
+  "legacyIdentity": "legacy identity vs carlab-engine-lab-rust-2: 12 cases, 0 mismatches",
+  "build": "passed",
+  "api": {
+    "check": "standalone packed TypeScript consumer",
+    "passed": true,
+    "npmRuntimeDependencies": 0,
+    "rpm": 2447.5658291655786,
+    "backend": "rust",
+    "frames": 128,
+    "ecuResetTime": 0,
+    "dieselMode": "directInjectionDiesel",
+    "phasing": 7.599886070751936,
+    "invalidPhasingRejected": 7
+  },
+  "browser": {
+    "workshop": {
+      "checks": 58,
+      "errors": 0,
+      "uploads": 0,
+      "failure": null
+    },
+    "v3": {
+      "checks": 22,
+      "errors": 0,
+      "uploads": 0,
+      "failure": null
+    },
+    "v4": {
+      "checks": 30,
+      "errors": 0,
+      "uploads": 0,
+      "failure": null
+    },
+    "efi": {
+      "checks": 24,
+      "errors": 0,
+      "uploads": 0,
+      "failure": null
+    }
+  }
+}
