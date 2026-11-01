@@ -12,11 +12,17 @@ Install Node.js, Rust and the `wasm32-unknown-unknown` target. The Rust build us
 
 ```sh
 npm ci
-lm-remote --host local --timeout 12 --pull native/dist --pull api/dist --pull dist --pull .cloudflare/output/v0 npm run build
+carlab_source_commit=$(git rev-parse HEAD)
+lm-remote --host local --timeout 12 --pull native/dist --pull api/dist --pull dist --pull .cloudflare/output/v0 \
+  "CARLAB_SOURCE_COMMIT=$carlab_source_commit npm run build && CARLAB_SOURCE_COMMIT=$carlab_source_commit node scripts/check-release.mjs"
 npm run dev
 ```
 
-The build compiles the WASM core, packages the API and builds the web application. `npm run build:native` builds the native executable. Run the project tests through the configured runner:
+The build compiles the WASM core, packages the API and builds the web application. `npm run build:native` builds the native executable.
+
+Release checks require a clean committed source tree and an explicit source revision captured outside the runner. Development builds without that variable are marked unverified and cannot pass the release gate.
+
+Run the project tests through the configured runner. The complete suite builds WASM and checks the frozen model-2 identity cases as well as the unit tests:
 
 ```sh
 lm-remote --host local npm run test:all

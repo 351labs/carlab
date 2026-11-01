@@ -3,6 +3,44 @@
 # Native executable/targets are ignored; ship the reviewed WASM asset with the TypeScript API.
 set -euo pipefail
 cd "$(dirname "$0")"
+# Cargo prefers encoded flags over RUSTFLAGS. Preserve whichever form Cargo
+# would have used, then append path remaps as single arguments (spaces safe).
+engine_lab_sep=$'\x1f'
+engine_lab_flags=()
+if [[ ${CARGO_ENCODED_RUSTFLAGS+x} ]]; then
+  if [[ -n $CARGO_ENCODED_RUSTFLAGS ]]; then
+    IFS="$engine_lab_sep" read -r -a engine_lab_flags <<< "$CARGO_ENCODED_RUSTFLAGS"
+  fi
+elif [[ -n ${RUSTFLAGS:-} ]]; then
+  # Cargo splits RUSTFLAGS on whitespace, rather than parsing shell quotes.
+  while IFS= read -r engine_lab_line; do
+    read -r -a engine_lab_words <<< "$engine_lab_line"
+    engine_lab_flags+=("${engine_lab_words[@]}")
+  done <<< "$RUSTFLAGS"
+fi
+engine_lab_remap() {
+  local source=$1 target=$2 physical
+  [[ $source = /* ]] || source="$PWD/$source"
+  [[ -n $source && $source = /* && $source != / && $source != *'='* && $source != *"$engine_lab_sep"* && $source != *$'\n'* ]] || {
+    echo 'Cannot safely remap an invalid build path.' >&2; exit 1;
+  }
+  engine_lab_flags+=("--remap-path-prefix=$source=$target")
+  if [[ -d $source ]]; then
+    physical=$(cd "$source" && pwd -P)
+    [[ $physical != "$source" ]] && engine_lab_flags+=("--remap-path-prefix=$physical=$target")
+  fi
+  return 0
+}
+# More specific paths come last, so Cargo, rustup and project sources retain
+# distinct virtual prefixes even when they live beneath the home directory.
+engine_lab_remap "$HOME" /carlab-home
+engine_lab_remap "${TMPDIR:-/tmp}" /carlab-tmp
+engine_lab_remap "${CARGO_HOME:-$HOME/.cargo}" /carlab-cargo
+engine_lab_remap "${RUSTUP_HOME:-$HOME/.rustup}" /carlab-rustup
+engine_lab_remap "$PWD" /carlab-src
+engine_lab_remap "$(pwd -P)" /carlab-src
+printf -v CARGO_ENCODED_RUSTFLAGS '%s' "$(IFS="$engine_lab_sep"; printf '%s' "${engine_lab_flags[*]}")"
+export CARGO_ENCODED_RUSTFLAGS
 engine_lab_build_kind=${1:-all}
 case "$engine_lab_build_kind" in native|wasm|all) ;; *) echo 'Usage: build-native.sh [native|wasm|all]' >&2; exit 2;; esac
 engine_lab_native_root="$PWD/native"

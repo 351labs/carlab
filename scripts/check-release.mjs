@@ -2,8 +2,11 @@ import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { createHash } from 'node:crypto';
+import { sourceRevision } from './source-revision.mjs';
+import { execFileSync } from 'node:child_process';
 
 const root = resolve(import.meta.dirname, '..');
+const identity = sourceRevision({ root, requireExplicit: true });
 const output = resolve(root, '.cloudflare/output/v0/workers/default');
 const worker = JSON.parse(await readFile(resolve(output, 'worker.config.json'), 'utf8'));
 assert.equal(worker.name, 'carlab');
@@ -16,7 +19,8 @@ const manifest = JSON.parse(await readFile(resolve(root, 'dist/release.json'), '
 const build = JSON.parse(await readFile(resolve(output, 'assets/build.json'), 'utf8'));
 assert.equal(build.application, 'CarLab');
 assert.match(build.sourceCommit, /^[a-f0-9]{40}$/);
-if (process.env.CARLAB_SOURCE_COMMIT) assert.equal(build.sourceCommit, process.env.CARLAB_SOURCE_COMMIT);
+assert.equal(build.sourceCommit, identity.sourceCommit);
+assert.equal(build.sourceIdentity, 'explicit-verified');
 for (const file of manifest.files) {
   assert.ok(!file.path.split('/').some(part => ['.env', '.git', 'node_modules', 'src'].includes(part)));
   assert.ok(!/\.(?:map|key|pem|p12|pfx)$/.test(file.path));
@@ -26,6 +30,9 @@ for (const file of manifest.files) {
 const assets = await readdir(resolve(output, 'assets/assets'));
 assert.equal(assets.filter(name => /^index-.*\.js$/.test(name)).length, 1, 'Exactly one current application entry is published.');
 assert.equal(assets.filter(name => name.endsWith('.wasm')).length, 1);
+const wasmPath = resolve(output, 'assets/assets', assets.find(name => name.endsWith('.wasm')));
+assert.equal(createHash('sha256').update(await readFile(wasmPath)).digest('hex'), build.wasmSha256);
+execFileSync(process.execPath, [resolve(root, 'scripts/check-binary-paths.mjs'), wasmPath], { cwd: root, stdio: 'inherit' });
 for (const file of ['LICENSE', 'NOTICE', 'credits.md', 'THIRD_PARTY_NOTICES.md', 'licenses/three-MIT.txt', 'licenses/vite-MIT.md', 'licenses/cantera-BSD-3-Clause.txt', 'licenses/rust-and-dependencies.md', 'references/ATTRIBUTION.md']) {
   assert.ok((await readFile(resolve(output, 'assets', file))).length > 100, file);
 }

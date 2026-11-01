@@ -11,9 +11,10 @@
     "build:native": "bash build-native.sh all",
     "build:api": "node api/build.mjs",
     "typecheck": "tsc --noEmit && tsc -p api/tsconfig.json --noEmit",
-    "test": "node --test '*.test.ts' 'workshop/*.test.ts' 'validation/*.test.mjs' 'api/*.test.ts'",
+    "test": "node --test '*.test.ts' 'workshop/*.test.ts' 'validation/*.test.mjs' 'api/*.test.ts' 'scripts/*.test.mjs'",
     "test:rust": "cargo test --offline --locked --manifest-path native/Cargo.toml",
-    "test:all": "npm test && npm run test:rust",
+    "test:legacy": "bash build-native.sh wasm && node validation/legacy-identity.mjs",
+    "test:all": "npm test && npm run test:rust && npm run test:legacy",
     "preview": "vite preview --config preview.config.ts --host 127.0.0.1 --port 5433",
     "deploy": "cf deploy --prebuilt --mode production"
   },
