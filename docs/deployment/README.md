@@ -6,19 +6,20 @@ The mathematical model and synthesis execute on the visitor's CPU in Rust/WASM a
 
 ## Verified release
 
-- Application source: `985f45136e41d4851ea6168c12bc68fd58b895a5`.
+- Application source: `032ce18d09940e02f8e660e6a378d4ec21fe84f5`.
 - Cloudflare Worker: `carlab`.
-- Cloudflare version: `52562b18-e420-41ab-9cd9-43f550f59e67`.
+- Cloudflare version: `fe1826b2-e846-4cee-9822-ce6443af899c`.
 - Only custom domain: `carlab.351labs.xyz`; Workers.dev and preview URLs are disabled.
 - The deployed JavaScript and WASM payload hashes match the locally verified release manifest.
 - HTTPS certificate verification passed. HTML is revalidated; content-addressed assets use a year of immutable browser caching. A missing JavaScript asset returns HTTP 404, rather than an HTML fallback.
 
-The [deployment record](proof/deployment.json) contains release hashes, jobs and scope. The [release manifest](proof/release-manifest.json) inventories the built files. The notice inventory, Three.js MIT text, Rust toolchain notices and audio credits are included in the public build.
+The [current deployment record](../review/fixes-2026-11-01/deployment.json) contains release hashes, jobs and scope, with the [current release manifest](../review/fixes-2026-11-01/release-manifest.json). The [initial deployment record](proof/deployment.json) and [initial manifest](proof/release-manifest.json) remain historical evidence. The current build includes Apache/NOTICE/credits, Cantera/Three.js/Vite notices, the Rust inventory and audio provenance/attribution.
 
 ## Validation
 
 All checks ran through the local `lm-remote` runner:
 
+- The adversarial corrections passed 165 Node/TypeScript and 130 Rust tests, 12 frozen legacy cases, 134 production-preview checks and 58 checks against live HTTPS. Native/WASM private-path scans and the packed API consumer passed. The [fix record](../review/fixes-2026-11-01.md) identifies exact source scopes and jobs; the remaining bullets below document the initial release.
 - A fresh install from the standalone lockfile, native executable and WASM compilation, typecheck, web build and `npm run test:all` passed in `carlab-1101-124844-37925`.
 - Ten focused data-import/provenance/metric checks passed in `carlab-1101-125220-46072`. Schema metadata changed during extraction; measured arrays, split membership and reference numerical cases remain frozen, as recorded in `validation/import-provenance.json`.
 - The standalone packed TypeScript consumer passed with **zero npm runtime dependencies** in `carlab-1101-125403-48569`. That job also passed 127 compiled-browser checks across the workshop, comparisons/library, cycle/thermal/material workflows and EFI.

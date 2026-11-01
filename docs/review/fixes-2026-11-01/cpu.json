@@ -1,0 +1,31 @@
+{
+  "sourceCommit": "ba83c4df03018b2d46d28ddb1ddcd4cce855d78f",
+  "typecheck": "passed",
+  "nodeTests": 165,
+  "rustTests": 130,
+  "legacyIdentity": "legacy identity vs carlab-engine-lab-rust-2: 12 cases, 0 mismatches",
+  "release": {
+    "worker": "carlab",
+    "domain": "carlab.351labs.xyz",
+    "files": 51,
+    "sourceCommit": "ba83c4df03018b2d46d28ddb1ddcd4cce855d78f",
+    "wasmSha256": "a1459acc5500d1e74ddeb219856b941d398ce562ef35f1c8a088ca364a40e16b",
+    "status": "passed"
+  },
+  "consumer": {
+    "check": "standalone packed TypeScript consumer",
+    "passed": true,
+    "npmRuntimeDependencies": 0,
+    "rpm": 2447.5658291655786,
+    "backend": "rust",
+    "frames": 128,
+    "ecuResetTime": 0,
+    "dieselMode": "directInjectionDiesel",
+    "phasing": 7.599886070751936,
+    "invalidPhasingRejected": 7
+  },
+  "nativeAndWasmPathScan": "passed",
+  "mazdaCurrentModelSmoke": "passed",
+  "pythonAnalyzer": "passed",
+  "scope": "Functional local runner checks; no performance timing or independent engine validation claim."
+}

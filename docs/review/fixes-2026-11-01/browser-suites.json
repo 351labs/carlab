@@ -1,0 +1,30 @@
+{
+  "sourceCommit": "f9b6898b0a12f8137a59d54724e99850632f1dfa",
+  "policy": "Enforced public/_headers on production static previews",
+  "suites": {
+    "workshop": {
+      "checks": 58,
+      "errors": 0,
+      "uploads": 0,
+      "failure": null
+    },
+    "v3": {
+      "checks": 22,
+      "errors": 0,
+      "uploads": 0,
+      "failure": null
+    },
+    "v4": {
+      "checks": 30,
+      "errors": 0,
+      "uploads": 0,
+      "failure": null
+    },
+    "efi": {
+      "checks": 24,
+      "errors": 0,
+      "uploads": 0,
+      "failure": null
+    }
+  }
+}

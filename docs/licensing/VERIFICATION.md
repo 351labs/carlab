@@ -1,5 +1,7 @@
 # Apache-2.0 and attribution preparation
 
+Historical preparation record. Subsequent corrections, owner confirmation and live deployment are recorded in [the adversarial fix report](../review/fixes-2026-11-01.md) and [ORIGIN.md](ORIGIN.md).
+
 Date: 1 November 2026. Source change: `31ba8c748727ce7bb8e010535cefa20c1ed68657`.
 
 This preparation adds the exact official Apache-2.0 text, NOTICE, root/API/Cargo metadata, the complete `credits.md` register, corrected NASA data attribution, and separate third-party notices. Original third-party texts retain their own terms. The full Vite notice is copied verbatim, including upstream whitespace; `.gitattributes` excludes only that file from whitespace diagnostics.

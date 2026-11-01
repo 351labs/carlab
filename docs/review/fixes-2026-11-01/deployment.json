@@ -1,0 +1,28 @@
+{
+  "application": "CarLab",
+  "url": "https://carlab.351labs.xyz/",
+  "sourceCommit": "032ce18d09940e02f8e660e6a378d4ec21fe84f5",
+  "cloudflareVersion": "fe1826b2-e846-4cee-9822-ce6443af899c",
+  "worker": "carlab",
+  "assetsOnly": true,
+  "wasmSha256": "a1459acc5500d1e74ddeb219856b941d398ce562ef35f1c8a088ca364a40e16b",
+  "applicationEntry": {
+    "path": "assets/index-9x8Ig9yD.js",
+    "bytes": 651057,
+    "sha256": "f1da7d76d0149e012ab0970ede90005d4550d223f0b38377b6a9bb8da5c4ff99"
+  },
+  "sourceIdentity": "explicit-verified",
+  "releaseFiles": 51,
+  "repositoryVisibility": "private",
+  "checks": {
+    "cpuJob": "carlab-1101-161119-51020",
+    "browserJob": "carlab-1101-160946-46921",
+    "releaseJob": "carlab-1101-161426-57844",
+    "liveJob": "carlab-1101-161554-59792",
+    "nodeTests": 165,
+    "rustTests": 130,
+    "localBrowserChecks": 134,
+    "liveBrowserChecks": 58
+  },
+  "scope": "Functional local-runner and production checks; no hardware performance or real-engine accuracy claim."
+}

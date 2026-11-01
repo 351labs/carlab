@@ -1,0 +1,16 @@
+{
+  "sourceCommit": "032ce18d09940e02f8e660e6a378d4ec21fe84f5",
+  "sourceIdentity": "explicit-verified",
+  "wasmSha256": "a1459acc5500d1e74ddeb219856b941d398ce562ef35f1c8a088ca364a40e16b",
+  "httpsStatus": 200,
+  "csp": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+  "cacheControl": "no-cache, no-transform",
+  "framePolicy": "DENY",
+  "staticHtmlPreserved": true,
+  "licenseCopies": "byte-identical",
+  "wasmPrivatePathScan": "passed",
+  "browserChecks": 58,
+  "scriptErrors": 0,
+  "applicationUploads": 0,
+  "platformRequests": 0
+}
