@@ -665,17 +665,35 @@ impl Model<'_> {
 
 /// Spark-to-SOC offset that places Wiebe CA10 `spark_to_ca10_deg` after the spark.
 /// A spark-to-CA10 delay is not a SOC shift: subtract the intrinsic SOC-to-CA10
-/// interval of the configured Wiebe curve.
+/// interval of the configured Wiebe curve. Inputs must be finite, the delay
+/// nonnegative, and the curve parameters within the cycle kernel's domain.
+/// The resulting offset must also fit the kernel's -20..=60 degree range.
 pub fn spark_to_soc_from_ca10_delay(
     spark_to_ca10_deg: f64,
     burn_duration_deg: f64,
     wiebe_efficiency: f64,
     wiebe_shape: f64,
-) -> f64 {
+) -> Result<f64, String> {
+    if !spark_to_ca10_deg.is_finite() || spark_to_ca10_deg < 0.0 {
+        return Err("sparkToCa10Deg must be finite and nonnegative".into());
+    }
+    for (name, value, min, max) in [
+        ("burnDurationDeg", burn_duration_deg, 8.0, 120.0),
+        ("wiebeEfficiency", wiebe_efficiency, 1.0, 12.0),
+        ("wiebeShape", wiebe_shape, 0.1, 5.0),
+    ] {
+        if !value.is_finite() || !(min..=max).contains(&value) {
+            return Err(format!("{name} must be finite and in {min}..={max}"));
+        }
+    }
     let soc_to_ca10 = burn_duration_deg
         * (-(1.0 - 0.1 * (1.0 - (-wiebe_efficiency).exp())).ln() / wiebe_efficiency)
             .powf(1.0 / (wiebe_shape + 1.0));
-    spark_to_ca10_deg - soc_to_ca10
+    let offset = spark_to_ca10_deg - soc_to_ca10;
+    if !offset.is_finite() || !(-20.0..=60.0).contains(&offset) {
+        return Err("resulting sparkToSocDeg must be finite and in -20..=60".into());
+    }
+    Ok(offset)
 }
 
 pub fn solve_cylinder_cycle(input: &CylinderCycleConfig) -> Result<CylinderCycleResult, String> {

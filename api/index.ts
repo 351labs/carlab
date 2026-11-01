@@ -148,8 +148,12 @@ export class EngineLab {
  getCylinderCycle(engine:Partial<EngineConfig>,physical:Partial<PhysicalConfig>,rpm:number,throttle:number,override?:Partial<GasPathBoundary>,boostFraction=1):CalibratedCylinderCycle{return this.request('getCylinderCycle',{engine,physical,rpm,throttle,override,boostFraction});}
  /** `override` fixes the intake/exhaust boundary (static measured-condition evaluation) instead of solving the gas path. */
  evaluateEngine(engine:Partial<EngineConfig>,physical:Partial<PhysicalConfig>,rpm:number,throttle:number,boostFraction=1,override?:Partial<GasPathBoundary>):EngineEstimate{return this.request('evaluate',{engine,physical,rpm,throttle,boostFraction,override});}
- /** Converts a measured spark->CA10 delay into the kernel's spark->SOC offset (subtracts the Wiebe SOC->CA10 interval). */
- sparkToSocFromCa10Delay(sparkToCa10Deg:number,burnDurationDeg=50,wiebeEfficiency=6.9,wiebeShape=2):number{return this.request('sparkToSocFromCa10Delay',{sparkToCa10Deg,burnDurationDeg,wiebeEfficiency,wiebeShape});}
+ /** Converts a finite nonnegative spark->CA10 delay to a kernel-valid spark->SOC offset. Duration: 8–120, efficiency: 1–12, shape: 0.1–5; the resulting offset must be -20–60 degrees. Invalid inputs throw. */
+ sparkToSocFromCa10Delay(sparkToCa10Deg:number,burnDurationDeg=50,wiebeEfficiency=6.9,wiebeShape=2):number {
+  const result=this.request<unknown>('sparkToSocFromCa10Delay',{sparkToCa10Deg,burnDurationDeg,wiebeEfficiency,wiebeShape});
+  if(typeof result!=='number'||!Number.isFinite(result))throw new EngineLabError('Invalid spark-to-SOC result.','sparkToSocFromCa10Delay');
+  return result;
+ }
  potentialEnvelope(engine:Partial<EngineConfig>,physical:Partial<PhysicalConfig>={},samples=64):PotentialEnvelope{return this.request('potential',{engine,physical,samples});}
  normalizeThermalConfig(config:Partial<ThermalConfig>={}):ThermalConfig{return this.request('normalizeThermal',{config});}
  normalizeMaterialScreenConfig(config:Partial<MaterialScreenConfig>={}):MaterialScreenConfig{return this.request('normalizeMaterialScreen',{config});}

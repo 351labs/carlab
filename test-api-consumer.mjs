@@ -23,6 +23,13 @@ try{
  await writeFile(join(consumer,'consumer.ts'),`import {loadEngineLab,type EngineConfig,type PhysicalConfig} from '@carlab/engine';
 export async function create(wasm:Uint8Array){
  const core=await loadEngineLab({wasm});
+ const phasing=core.sparkToSocFromCa10Delay(20,50,6.9,2);
+ if(Math.abs(phasing-7.599886070751936)>1e-12)throw new Error('Valid phasing conversion changed.');
+ let invalidPhasingRejected=0;
+ for(const args of [[20,50,0,2],[20,50,-1e308,2],[20,50,-1,2],[20,-50,6.9,2],[20,50,6.9,-1],[-1,50,6.9,2],[1e308,50,6.9,2]]){
+  try{core.sparkToSocFromCa10Delay(args[0],args[1],args[2],args[3]);}catch{invalidPhasingRejected++;}
+ }
+ if(invalidPhasingRejected!==7)throw new Error('Invalid phasing parameters were not rejected.');
  const engine:Partial<EngineConfig>={cylinders:4,displacement:2};
  const physical:Partial<PhysicalConfig>={engineInertiaKgM2:.25};
  const model=core.createPowertrain(engine,physical);
@@ -35,13 +42,14 @@ export async function create(wasm:Uint8Array){
  const dieselEngine={...engine,compression:16,redline:4500};
  const diesel=core.createPowertrain(dieselEngine,{ecu:core.normalizeEcuConfig(dieselEngine,{enabled:true,combustionMode:'directInjectionDiesel'})});
  const dieselState=diesel.stepMany({dt:1/240,steps:240,throttle:.4,gear:0});
- const result={rpm:state.rpm,backend:core.version.backend,frames:left.length,ecuResetTime:controller.getState().elapsedSeconds,dieselMode:dieselState.ecu?.combustionMode};core.dispose();return result;
+ const result={rpm:state.rpm,backend:core.version.backend,frames:left.length,ecuResetTime:controller.getState().elapsedSeconds,dieselMode:dieselState.ecu?.combustionMode,phasing,invalidPhasingRejected};core.dispose();return result;
 }\n`);
  await writeFile(join(consumer,'tsconfig.json'),JSON.stringify({compilerOptions:{target:'es2024',module:'NodeNext',moduleResolution:'NodeNext',lib:['es2024','DOM'],strict:true,skipLibCheck:false,outDir:'dist',types:[]},include:['consumer.ts']}));
  run(resolve('node_modules/.bin/tsc'),['-p',join(consumer,'tsconfig.json')],consumer);
  const {create}=await import(pathToFileURL(join(consumer,'dist','consumer.js')).href),wasm=new Uint8Array(await readFile(join(moduleDir,'dist','carlab_engine_lab.wasm'))),result=await create(wasm);
  assert.equal(result.backend,'rust');assert.ok(result.rpm>0);assert.equal(result.frames,128);
  assert.equal(result.ecuResetTime,0);assert.equal(result.dieselMode,'directInjectionDiesel');
+ assert.equal(result.invalidPhasingRejected,7);
  const entries=await readdir(join(moduleDir,'dist'));assert.ok(entries.includes('index.js')&&entries.includes('index.d.ts')&&entries.includes('types.d.ts'));
  console.log(JSON.stringify({check:'standalone packed TypeScript consumer',passed:true,npmRuntimeDependencies:0,...result}));
 }finally{await rm(temporary,{recursive:true,force:true});}

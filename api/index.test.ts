@@ -134,3 +134,15 @@ test('diesel mode, cylinder-side pressure, quantity search and explicit mode res
  f.core.solveCylinderCycle({combustionStartDeg:362,fuelDeliveryStartDeg:352,fuelDeliveryDurationDeg:20});assert.deepEqual(f.calls.at(-1)!.config,{combustionStartDeg:362,fuelDeliveryStartDeg:352,fuelDeliveryDurationDeg:20});
  const plant=f.core.createPowertrain({});plant.setConfigAndReset({},{});assert.equal(f.calls.at(-1)!.op,'setPowertrainConfigAndReset');f.core.dispose();
 });
+
+
+test('spark-to-SOC helper cannot return a null or non-number response',()=>{
+ const f=fixture();
+ f.badEnvelope({apiVersion:1,ok:true,result:12.5});
+ assert.equal(f.core.sparkToSocFromCa10Delay(20),12.5);
+ for(const result of [null,'12',{},[]]){
+  f.badEnvelope({apiVersion:1,ok:true,result});
+  assert.throws(()=>f.core.sparkToSocFromCa10Delay(20),/Invalid spark-to-SOC result/);
+ }
+ assert.throws(()=>f.core.sparkToSocFromCa10Delay(Number.NaN),/finite/);
+});

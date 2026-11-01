@@ -270,7 +270,7 @@ impl Runtime {
                 number(request, "burnDurationDeg", 50.)?,
                 number(request, "wiebeEfficiency", 6.9)?,
                 number(request, "wiebeShape", 2.)?,
-            )),
+            )?),
             "potential" | "potentialEnvelope" => {
                 let e = engine(request)?;
                 let p = physical(request, &e)?;

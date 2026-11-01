@@ -134,7 +134,7 @@ fn spark_to_soc_offset_shifts_phasing_one_to_one_and_converts_ca10_delays() {
     near(late.ca50_deg - base.ca50_deg, 7.0, 1e-9);
     near(base.soc_deg, 335.0, 1e-12);
     // A requested spark-to-CA10 delay lands CA10 exactly that far after the spark.
-    let offset = spark_to_soc_from_ca10_delay(18.0, 50.0, 6.9, 2.0);
+    let offset = spark_to_soc_from_ca10_delay(18.0, 50.0, 6.9, 2.0).unwrap();
     assert!(offset < 18.0);
     let r = solve_cylinder_cycle(&cycle(json!({"sparkAdvanceDeg":25,"sparkToSocDeg":offset}))).unwrap();
     near(r.ca10_deg, 335.0 + 18.0, 1e-9);
@@ -262,4 +262,43 @@ fn nasa_adiabatic_throttled_intake_is_not_colder_than_its_fresh_air() {
     let bdc = c.trace.angle_deg.iter().position(|a| *a >= 180.0).unwrap();
     assert!(c.trace.temperature_k[bdc] > boundary.intake_temperature_k, "T at BDC {}", c.trace.temperature_k[bdc]);
     assert!(c.calibration.actual_ve < 1.0, "throttled NA VE {}", c.calibration.actual_ve);
+}
+
+#[test]
+fn ca10_helper_rejects_invalid_domain_and_preserves_cycle_boundaries() {
+    for duration in [8.0, 120.0] {
+        for efficiency in [1.0, 12.0] {
+            for shape in [0.1, 5.0] {
+                // Delay 60 is valid for all curve corners and establishes the
+                // intrinsic interval without relying on an invalid offset.
+                let intrinsic = 60.0 - spark_to_soc_from_ca10_delay(60.0, duration, efficiency, shape).unwrap();
+                let result = spark_to_soc_from_ca10_delay(intrinsic, duration, efficiency, shape).unwrap();
+                near(result, 0.0, 1e-12);
+            }
+        }
+    }
+    for args in [
+        (20.0, 50.0, 0.0, 2.0), (20.0, 50.0, -1e308, 2.0),
+        (20.0, 50.0, -1.0, 2.0), (20.0, -50.0, 6.9, 2.0),
+        (20.0, 50.0, 6.9, -1.0), (-1.0, 50.0, 6.9, 2.0),
+        (f64::NAN, 50.0, 6.9, 2.0), (20.0, f64::INFINITY, 6.9, 2.0),
+        (20.0, 50.0, 6.9, f64::NAN), (1e308, 50.0, 6.9, 2.0),
+        (20.0, 7.99, 6.9, 2.0), (20.0, 120.01, 6.9, 2.0),
+        (20.0, 50.0, 12.01, 2.0), (20.0, 50.0, 6.9, 5.01),
+    ] {
+        assert!(spark_to_soc_from_ca10_delay(args.0, args.1, args.2, args.3).is_err(), "{args:?}");
+    }
+}
+
+#[test]
+fn ca10_dispatch_returns_number_or_explicit_error() {
+    let mut runtime = carlab_engine_lab::Runtime::default();
+    let valid = runtime.dispatch(&json!({"op":"sparkToSocFromCa10Delay", "sparkToCa10Deg":20})).unwrap();
+    assert!(valid.as_f64().unwrap().is_finite());
+    for request in [
+        json!({"op":"sparkToSocFromCa10Delay", "wiebeEfficiency":0}),
+        json!({"op":"sparkToSocFromCa10Delay", "burnDurationDeg":-50}),
+        json!({"op":"sparkToSocFromCa10Delay", "sparkToCa10Deg":1e308}),
+        json!({"op":"sparkToSocFromCa10Delay", "wiebeShape":null}),
+    ] { assert!(runtime.dispatch(&request).is_err()); }
 }

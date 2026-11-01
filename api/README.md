@@ -77,7 +77,7 @@ console.log(state.rpm, state.thermal.wallTemperatureK);
 core.dispose();
 ```
 
-`stepMany` integrates inside Rust and returns the final state with one control-boundary call. It accepts 0–100,000 steps and a positive step up to 0.25 s. Individual `step` accepts zero as a state-preserving no-op. These are caller-selected numerical conditions, not wall-clock scheduling guarantees. Native CLI use, profiling and verified comparison results are documented in the parent engine-lab report.
+`stepMany` integrates inside Rust and returns the final state with one control-boundary call. It accepts 0–100,000 steps and a positive step up to 0.25 s. Individual `step` accepts zero as a state-preserving no-op. These are caller-selected numerical conditions, not wall-clock scheduling guarantees. Build the independent native CLI with `npm run build:native` through `lm-remote --host local`; `native/dist/carlab-engine --help` describes its input/output operations. Model assumptions and reproducibility limits are documented in [the model guide](../docs/model.md).
 
 ## Workers and AudioWorklet
 
@@ -160,7 +160,7 @@ Package 0.7 runs Rust model `carlab-engine-lab-rust-3`. Every new `PhysicalConfi
 | `fuelHydrogenCarbonRatio`, `fuelOxygenCarbonRatio` | mol/mol (1.85, 0) | Fuel composition for the NASA-7 products and stoichiometry. |
 | `heatTransferModel` | `constant` (default), `woschni` | Woschni 1967 coefficient (bore, pressure, temperature, characteristic gas velocity with combustion term). |
 | `heatTransferMultiplier` | dimensionless (1) | Woschni only. |
-| `sparkToSocDeg` | ° crank (0) | SOC = firing TDC − spark advance + offset. SI only; diesel SOC is unchanged. `sparkToSocFromCa10Delay(delay, duration, a, m)` converts a measured spark→CA10 delay. |
+| `sparkToSocDeg` | ° crank (0) | SOC = firing TDC − spark advance + offset. SI only; diesel SOC is unchanged. `sparkToSocFromCa10Delay(delay, duration, a, m)` converts a measured spark→CA10 delay. It rejects non-finite or negative delay, duration outside 8–120°, efficiency outside 1–12, shape outside 0.1–5, and resulting offsets outside the kernel’s −20–60° range. |
 | `intakeCamRetardDeg`, `exhaustCamRetardDeg` | ° crank, + = later (0) | Shift opening and closing together; clamping to the kernel range is reported as a warning. |
 | `airflowModel` | `ve-map-fit` (default), `valve-geometry` | `valve-geometry` solves the valves once and does not fit lift to the VE map target. `calibration.trials` logs every VE trial; `missClassification` explains a missed target. |
 
