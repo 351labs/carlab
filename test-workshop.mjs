@@ -2,24 +2,36 @@ import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { hostname } from 'node:os';
+import { isIP } from 'node:net';
 import { preview } from 'vite';
 import puppeteer from 'puppeteer-core';
 
 // Functional checks only. Run via lm-remote --host local --gpu; not a benchmark.
 const proof = process.env.ENGINE_LAB_PROOF ?? 'docs/workshop/proof';
 await mkdir(proof, { recursive: true });
-const checks = [], errors = [], uploads = [], models = {}, translations = {};
+const checks = [], errors = [], uploads = [], platformRequests = [], models = {}, translations = {};
 let server, browser, failure;
 const check = (name, value) => { assert.ok(value, name); checks.push(name); };
 try {
   if (!process.env.CARLAB_TEST_URL) server = await preview({ configFile: 'preview.config.ts', build: { outDir: process.env.ENGINE_LAB_DIST ?? 'dist/client' }, preview: { host: '127.0.0.1', port: 0, strictPort: false } });
   const executablePath = process.env.CHROME_PATH ?? ['/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', '/Applications/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing'].find(existsSync);
-  browser = await puppeteer.launch({ executablePath, headless: true, args: ['--mute-audio', '--autoplay-policy=user-gesture-required'] });
+  const args = ['--mute-audio', '--autoplay-policy=user-gesture-required'];
+  if (process.env.CARLAB_TEST_DNS_ADDRESS) {
+    assert.equal(isIP(process.env.CARLAB_TEST_DNS_ADDRESS), 4);
+    assert.ok(process.env.CARLAB_TEST_URL);
+    args.push(`--host-resolver-rules=MAP ${new URL(process.env.CARLAB_TEST_URL).hostname} ${process.env.CARLAB_TEST_DNS_ADDRESS}`);
+  }
+  browser = await puppeteer.launch({ executablePath, headless: true, args });
   const page = await browser.newPage();
   await page.setViewport({ width: 1440, height: 1100, deviceScaleFactor: 1 });
-  page.on('pageerror', error => errors.push(String(error)));
+  page.on('pageerror', error => errors.push(error.stack ?? String(error)));
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
-  page.on('request', request => { if (!['GET', 'HEAD'].includes(request.method())) uploads.push(request.url()); });
+  page.on('request', request => {
+    if (['GET', 'HEAD'].includes(request.method())) return;
+    const url = new URL(request.url());
+    if (process.env.CARLAB_TEST_URL && url.origin === new URL(process.env.CARLAB_TEST_URL).origin && url.pathname.startsWith('/cdn-cgi/challenge-platform/')) platformRequests.push({ method: request.method(), platform: 'Cloudflare security check' });
+    else uploads.push(request.url());
+  });
   const origin = process.env.CARLAB_TEST_URL ?? `http://127.0.0.1:${server.httpServer.address().port}/`;
   const target = new URL(origin); target.searchParams.set('mode', 'normal'); target.searchParams.set('lang', 'pt');
   const url = target.href;
@@ -101,6 +113,7 @@ try {
   await select('[data-workshop-language]', 'ja');
   check('Japanese also translates the edited-engine heading and voice tags', await page.evaluate(() => !document.querySelector('#engine-name').textContent.includes('Sua configuração') && !document.querySelector('#voice-tags').textContent.includes('cilindrada')));
   await page.screenshot({ path: `${proof}/desktop-ja.png` });
+  check('beforeunload alone preserves the native model until navigation commits', await page.evaluate(() => { window.dispatchEvent(new Event('beforeunload')); return Number.isFinite(window.__engineLab.getPowertrainState().rpm); }));
   await page.reload({ waitUntil: 'networkidle0' });
   await page.waitForFunction(() => window.__engineLab?.workshop().meshes > 0);
   check('language and mode survive reload through the shareable URL', await page.evaluate(() => window.__engineLab.getLocale() === 'ja' && window.__engineLab.getMode() === 'normal'));
@@ -132,11 +145,11 @@ try {
   check('WebGL-unavailable fallback leaves audio and mathematical controls usable', await fallback.evaluate(() => document.querySelector('.workshop-render-status').textContent.includes('unavailable') && !document.querySelector('#power').disabled && window.__engineLab.getConfig().cylinders > 0));
   await fallback.close();
   check('no script or console errors occurred', errors.length === 0);
-  check('no data was uploaded', uploads.length === 0);
+  check('application performs no uploads outside Cloudflare-managed security checks', uploads.length === 0);
 } catch (error) { failure = error; }
 finally {
   await browser?.close(); await server?.httpServer.close();
-  await writeFile(`${proof}/browser-check.json`, JSON.stringify({ host: hostname(), checks, models, translations, errors, uploads, failure: failure ? String(failure) : null, scope: 'Functional headless Chrome checks; no performance benchmark or real-engine fidelity claim.' }, null, 2) + '\n');
+  await writeFile(`${proof}/browser-check.json`, JSON.stringify({ host: hostname(), target: process.env.CARLAB_TEST_URL ?? 'local preview', dnsAddressOverride: process.env.CARLAB_TEST_DNS_ADDRESS ?? null, checks, models, translations, errors, uploads, platformRequests, failure: failure ? String(failure) : null, scope: 'Functional headless Chrome checks; no performance benchmark or real-engine fidelity claim. Cloudflare-managed security POSTs are recorded separately from application uploads.' }, null, 2) + '\n');
 }
 if (failure) throw failure;
 console.log(JSON.stringify({ passed: checks.length, errors: errors.length, uploads: uploads.length }));
