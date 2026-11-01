@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { mkdir, writeFile, mkdtemp, rm, readFile } from 'node:fs/promises';
-import { tmpdir, hostname } from 'node:os';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { existsSync } from 'node:fs';
 import { createServer } from 'vite';
@@ -136,7 +136,7 @@ try {
  await page.screenshot({path:`${proof}/engine-lab-mobile.png`,fullPage:true});
  check('mobile layout has no horizontal overflow',await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
  check('no browser or worklet errors',errors.length===0);
- const report={host:hostname(),browser:await browser.version(),checks,errors,scope:'Headless functional check via lm-remote; no reference performance or subjective listening claim.'};
+ const report={host:'lm-remote runner (hostname omitted)',browser:await browser.version(),checks,errors,scope:'Headless functional check via lm-remote; no reference performance or subjective listening claim.'};
  await writeFile(`${proof}/browser-check.json`,JSON.stringify(report,null,2));
  console.log(JSON.stringify(report,null,2));
 } finally {await browser?.close();await server.close();await rm(downloads,{recursive:true,force:true});}

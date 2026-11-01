@@ -1,7 +1,6 @@
 import assert from 'node:assert/strict';
 import { mkdir, writeFile, readFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
-import { hostname } from 'node:os';
 import { isIP } from 'node:net';
 import { preview } from 'vite';
 import puppeteer from 'puppeteer-core';
@@ -191,7 +190,7 @@ try {
 } catch (error) { failure = error; }
 finally {
   await browser?.close(); await server?.httpServer.close();
-  await writeFile(`${proof}/browser-check.json`, JSON.stringify({ host: hostname(), target: process.env.CARLAB_TEST_URL ?? 'local preview', dnsAddressOverride: process.env.CARLAB_TEST_DNS_ADDRESS ?? null, checks, models, translations, errors, uploads, platformRequests, failure: failure ? String(failure) : null, scope: 'Functional headless Chrome checks; no performance benchmark or real-engine fidelity claim. Cloudflare-managed security POSTs are recorded separately from application uploads.' }, null, 2) + '\n');
+  await writeFile(`${proof}/browser-check.json`, JSON.stringify({ host: 'lm-remote runner (hostname omitted)', target: process.env.CARLAB_TEST_URL ?? 'local preview', dnsAddressOverride: process.env.CARLAB_TEST_DNS_ADDRESS ?? null, checks, models, translations, errors, uploads, platformRequests, failure: failure ? String(failure) : null, scope: 'Functional headless Chrome checks; no performance benchmark or real-engine fidelity claim. Cloudflare-managed security POSTs are recorded separately from application uploads.' }, null, 2) + '\n');
 }
 if (failure) throw failure;
 console.log(JSON.stringify({ passed: checks.length, errors: errors.length, uploads: uploads.length }));

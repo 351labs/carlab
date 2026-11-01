@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { mkdir,writeFile,readFile,mkdtemp,rm } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
-import { tmpdir,hostname } from 'node:os';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { preview } from 'vite';
 import puppeteer from 'puppeteer-core';
@@ -128,7 +128,7 @@ try{
  check('compiled interface, workers and worklet have no errors',errors.length===0);
 }catch(error){failure=error;await page?.screenshot({path:join(proof,'failure.png')}).catch(()=>{});}
 finally{
- try{const result={host:hostname(),browser:browser?await browser.version().catch(()=>undefined):undefined,buildMode:'compiled-static',outDir,checks,errors,uploads,...(failure?{failure:String(failure)}:{}),scope:'Headless functional acceptance through lm-remote. Synthetic observations test workflow, not measured engine fidelity, safe calibration or performance.'};await writeFile(join(proof,'browser-check.json'),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result,null,2));}
+ try{const result={host:'lm-remote runner (hostname omitted)',browser:browser?await browser.version().catch(()=>undefined):undefined,buildMode:'compiled-static',outDir,checks,errors,uploads,...(failure?{failure:String(failure)}:{}),scope:'Headless functional acceptance through lm-remote. Synthetic observations test workflow, not measured engine fidelity, safe calibration or performance.'};await writeFile(join(proof,'browser-check.json'),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result,null,2));}
  finally{try{await browser?.close();}finally{try{if(server)await new Promise(r=>server.httpServer.close(r));}finally{await rm(temporary,{recursive:true,force:true});}}}
 }
 if(failure)throw failure;

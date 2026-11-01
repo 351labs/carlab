@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { mkdir,writeFile,readFile,mkdtemp,rm } from 'node:fs/promises';
-import { tmpdir,hostname } from 'node:os';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { existsSync } from 'node:fs';
 import { createServer,preview } from 'vite';
@@ -86,6 +86,6 @@ try{
  await page.screenshot({path:`${proof}/physics-mobile.png`});
  check('local references trigger no upload requests',uploads.length===0);
  check('no browser or audio-worklet errors',errors.length===0);
- const result={host:hostname(),browser:await browser.version(),buildMode:staticMode?'compiled-static':'vite-development',checks,errors,uploads,scope:'Headless functional checks through lm-remote; no subjective fidelity or performance timing claim.'};
+ const result={host:'lm-remote runner (hostname omitted)',browser:await browser.version(),buildMode:staticMode?'compiled-static':'vite-development',checks,errors,uploads,scope:'Headless functional checks through lm-remote; no subjective fidelity or performance timing claim.'};
  await writeFile(`${proof}/browser-check.json`,JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result,null,2));
 }finally{await browser?.close();if(staticMode)await new Promise(resolve=>server.httpServer.close(resolve));else await server.close();await rm(temporary,{recursive:true,force:true});}

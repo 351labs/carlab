@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { mkdir,writeFile,readFile,mkdtemp,rm } from 'node:fs/promises';
-import { tmpdir,hostname } from 'node:os';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { existsSync } from 'node:fs';
 import { preview } from 'vite';
@@ -138,7 +138,7 @@ try{
 }catch(error){failure=error;await page?.screenshot({path:join(proof,'failure.png')}).catch(()=>{});}
 finally{
  try{
-  const result={host:hostname(),browser:browser?await browser.version().catch(()=>undefined):undefined,buildMode:'compiled-static',outDir,checks,errors,uploads,...(failure?{failure:String(failure)}:{}),scope:'Headless functional checks through lm-remote. Synthetic pressure/material/map fixtures verify workflows, not engine fidelity, real material safety or reference performance.'};
+  const result={host:'lm-remote runner (hostname omitted)',browser:browser?await browser.version().catch(()=>undefined):undefined,buildMode:'compiled-static',outDir,checks,errors,uploads,...(failure?{failure:String(failure)}:{}),scope:'Headless functional checks through lm-remote. Synthetic pressure/material/map fixtures verify workflows, not engine fidelity, real material safety or reference performance.'};
   await writeFile(join(proof,'browser-check.json'),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result,null,2));
  }finally{
   try{await browser?.close();}
