@@ -22,6 +22,8 @@ The build compiles the WASM core, packages the API and builds the web applicatio
 
 Release checks require a clean committed source tree and an explicit source revision captured outside the runner. Development builds without that variable are marked unverified and cannot pass the release gate.
 
+The Rust build adds source-path remapping through a native compiler wrapper while retaining Cargo's flag selection. If Cargo configuration files are present, select the intended existing wrapper explicitly with `RUSTC_WRAPPER` or `CARGO_BUILD_RUSTC_WRAPPER`; an explicitly empty `RUSTC_WRAPPER` disables an existing wrapper. The build rejects an ambiguous configuration instead of silently bypassing a configured wrapper.
+
 Run the project tests through the configured runner. The complete suite builds WASM and checks the frozen model-2 identity cases as well as the unit tests:
 
 ```sh

@@ -19,6 +19,8 @@ lm-remote --host local \
 
 The owner may authorize another runner when local resources are unavailable. `api/dist/` contains `index.js`, `index.d.ts`, standalone DTO declarations and `carlab_engine_lab.wasm`. Build artifacts are ignored by Git; rebuilding is necessary before installing the local package. The package is private and is not published by this workflow.
 
+When Cargo configuration files exist, explicitly select the existing compiler wrapper with `RUSTC_WRAPPER` or `CARGO_BUILD_RUSTC_WRAPPER` (an explicitly empty `RUSTC_WRAPPER` means none). The remapping build preserves Cargo's flags and chains that selection; it refuses to guess a wrapper from stable Cargo's otherwise unresolved merged configuration.
+
 A web project can install the built local directory:
 
 ```sh
