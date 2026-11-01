@@ -2,6 +2,8 @@
 
 The project owner requested an independent repository under the `351labs` organization and selected Apache-2.0 for CarLab's original work on 1 November 2026. `LICENSE`, `NOTICE` and the package metadata record that decision. This document records the instructions and technical provenance; it is not a copyright-assignment instrument or an employment-contract audit.
 
+On 1 November 2026, in response to the review's specific ownership question, the owner confirmed that the code and synthetic audio from the preceding laboratory belong to the owner/351labs and have not been assigned to third parties. This is an explicit owner statement, not an inference from a Git identity. Review item B1 is therefore closed on the requested confirmation. The third-party exceptions below retain their separate terms.
+
 ## What is evidenced by the repository
 
 - The independent application was imported in commit `cdf5c10071cb55428723dc46234531d0b0ebd763` from the preceding engine laboratory developed in the same owner-directed workflow.
