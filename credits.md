@@ -220,6 +220,8 @@ The complete locked Cargo inventory is generated **offline from the actual cache
 
 The installed npm packages and lockfile enumerate the transitive build dependencies; retain their upstream notices if redistributing those tools or their source. A source citation is not a replacement for a required binary-distribution notice. Cloudflare and browser runtime services are external platforms, not CarLab-owned code. No commercial game code/data, manufacturer CAD, downloaded commercial audio library or proprietary ECU firmware is included.
 
+Cloudflare Developers, [JavaScript Detections: CSP and `no-transform` behavior](https://developers.cloudflare.com/cloudflare-challenges/challenge-types/javascript-detections/), supplies deployment interoperability guidance. CarLab uses the documented response-header behavior to preserve its CSP-checked static HTML; no Cloudflare implementation code is copied.
+
 ## 10. Scientific source register from the focused improvement study
 
 The following eighteen entries preserve the research catalogue IDs so each source remains attributable even where it overlaps the bibliography above. Access depth records what the researchers actually inspected, rather than claiming every source was fully reviewed. Method/domain summaries are research context, not a list of implemented algorithms. Restricted sources are cited without redistributing their content. Missing metadata remains explicit. Later implementation of NASA-7/Woschni is described in §§1–2 and does not retrospectively increase the original reading depth.

@@ -52,6 +52,10 @@ The cleanup targets only generated release directories and prevents stale files 
 
 The release gate requires an explicit existing source commit, rejects `lm-remote` snapshot commits, compares the committed source tree to the tree being built and rejects uncommitted source changes. The Rust build remaps local directories to virtual source prefixes; the binary path checker verifies the built WASM before release. The development diagnostics hook is available only in development or when the URL explicitly includes `?debug=1`; browser harnesses opt in to that flag.
 
+HTML responses use `Cache-Control: no-cache, no-transform` to preserve the static HTML checked under the enforced CSP. Cloudflare documents that JavaScript Detection injection is skipped for `no-transform` origin responses; no zone-wide security setting is changed. This static laboratory has no server-side simulation, authentication or upload endpoint. If that product is required for this application later, use a per-response nonce implementation instead of permitting arbitrary inline scripts. See [Cloudflare JavaScript Detections and CSP](https://developers.cloudflare.com/cloudflare-challenges/challenge-types/javascript-detections/).
+
+The current listening benchmark is integrated in the application and exercised by `test-browser-v3.mjs` and `listening-bench.test.ts`. The obsolete probe for a separate historical `/timbre/` page has been removed; that page is not part of the independent application.
+
 Historical browser proof files have had their local hostname field redacted for publication. Test outcomes and request/error counts are preserved; this is a privacy edit to the saved metadata, not a rerun or a change to the original result.
 
 These are functional and distribution checks, not reference performance benchmarks or validation of real-engine fidelity. The default physical parameters remain assumptions unless calibrated and independently assessed.
