@@ -1,6 +1,6 @@
 # Production deployment
 
-CarLab runs at **https://carlab.351labs.xyz/** as a dedicated Cloudflare Worker with static assets. The private source repository is **https://github.com/351labs/carlab**. The repository has its own history, pinned npm dependencies, locked Rust dependencies, build configuration, native executable, WebAssembly module and portable TypeScript API. There are no imports or package links to another application repository.
+CarLab runs at **https://carlab.351labs.xyz/** as a dedicated Cloudflare Worker with static assets. The source repository is **https://github.com/351labs/carlab**. The repository has its own history, pinned npm dependencies, locked Rust dependencies, build configuration, native executable, WebAssembly module and portable TypeScript API. There are no imports or package links to another application repository.
 
 The mathematical model and synthesis execute on the visitor's CPU in Rust/WASM and the AudioWorklet. Three.js renders the component models on the GPU. Cloudflare serves the application and its assets; this deployment adds no remote simulation service or database.
 

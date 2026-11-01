@@ -8,7 +8,9 @@ CarLab is a research and exploration tool. Its default inputs are assumptions, a
 
 ## Develop
 
-Install Node.js, Rust and the `wasm32-unknown-unknown` target. The Rust build uses the locked Cargo dependency cache offline; populate it with `cargo fetch --locked --manifest-path native/Cargo.toml` when necessary.
+Install Node.js 22.23+, 24.22+ or 26.12+ within those supported major lines, Rust and the `wasm32-unknown-unknown` target. Packaging also needs the installed Rust toolchain's license notices (normally supplied with `rust-docs`). The Rust build uses the locked Cargo dependency cache offline; populate it with `cargo fetch --locked --manifest-path native/Cargo.toml` when necessary.
+
+The npm scripts are ordinary standalone entry points. `lm-remote` in the examples is the maintainer's resource-control wrapper, not a runtime or package dependency; outside that environment, run the corresponding npm commands directly.
 
 ```sh
 npm ci
@@ -30,8 +32,8 @@ Run the project tests through the configured runner. The complete suite builds W
 lm-remote --host local npm run test:all
 ```
 
-Production is [carlab.351labs.xyz](https://carlab.351labs.xyz). The independent source repository is [351labs/carlab](https://github.com/351labs/carlab), private within the organization. See [deployment, verification and update instructions](docs/deployment/README.md).
+Production is [carlab.351labs.xyz](https://carlab.351labs.xyz). The independent source repository is [351labs/carlab](https://github.com/351labs/carlab). See [deployment, verification and update instructions](docs/deployment/README.md).
 
 ## Notices
 
-CarLab's original code and documentation are licensed under the [Apache License 2.0](LICENSE). See [NOTICE](NOTICE), [credits.md](credits.md), [third-party notices](THIRD_PARTY_NOTICES.md) and the [sound attribution](public/references/ATTRIBUTION.md). Third-party code, coefficient data, measured data and reference audio retain their own terms. The build includes the Apache license, credits, Cantera notice and generated Rust dependency/toolchain inventory with the API and public application. The source repository is currently private. See the [adversarial review corrections and verification](docs/review/fixes-2026-11-01.md).
+CarLab's original code and documentation are licensed under the [Apache License 2.0](LICENSE). See [NOTICE](NOTICE), [credits.md](credits.md), [third-party notices](THIRD_PARTY_NOTICES.md) and the [sound attribution](public/references/ATTRIBUTION.md). Third-party code, coefficient data, measured data and reference audio retain their own terms. The build includes the Apache license, credits, Cantera notice and generated Rust dependency/toolchain inventory with the API and public application. See the [adversarial review corrections and verification](docs/review/fixes-2026-11-01.md).

@@ -210,11 +210,11 @@ Dependency versions and integrity are fixed by `package-lock.json` and `native/C
 | Serde contributors | serde 1.0.228, serde_json 1.0.145, MIT OR Apache-2.0 | [Serde](https://github.com/serde-rs/serde), [serde_json](https://github.com/serde-rs/json). Native/WASM JSON boundary. |
 | Locked Cargo transitive contributors | Exact versions/checksums/SPDX and full supplied texts in generated notices | `itoa`, `memchr`, `proc-macro2`, `quote`, `ryu`, `serde_core`, `serde_derive`, `syn`, `unicode-ident`; build/proc-macro packages are included in the inventory without claiming all are linked. |
 | Vite contributors | 8.3.5, MIT | [Vite](https://github.com/vitejs/vite), build/preview and generated helpers. Full supplied notice preserved in `licenses/vite-MIT.md` and web distribution. |
-| Cloudflare Workers SDK contributors | @cloudflare/vite-plugin 2.0.0-beta.v.4, MIT | [Workers SDK](https://github.com/cloudflare/workers-sdk), development/deployment integration. |
-| Cloudflare cf contributors | cf 1.0.0-beta.21, MIT OR Apache-2.0 | [cf](https://github.com/cloudflare/cf), deployment tool, not browser runtime. |
+| Cloudflare Workers SDK contributors | @cloudflare/vite-plugin 2.0.0-beta.v.8, MIT | [Workers SDK](https://github.com/cloudflare/workers-sdk), development/deployment integration. |
+| Cloudflare cf contributors | cf 1.0.0-beta.26, MIT OR Apache-2.0 | [cf](https://github.com/cloudflare/cf), deployment tool, not browser runtime. |
 | Microsoft / TypeScript contributors | 7.0.2, Apache-2.0 | [TypeScript](https://github.com/microsoft/TypeScript), type checking/build tool; installed LICENSE/NOTICE apply. |
 | DefinitelyTyped contributors | @types/node 26.6.5; @types/three 0.186.0; MIT | [DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped), development type declarations. |
-| Puppeteer contributors | puppeteer-core 24.43.1, Apache-2.0 | [Puppeteer](https://github.com/puppeteer/puppeteer), headless verification tool, not browser runtime. |
+| Puppeteer contributors | puppeteer-core 25.16.0, Apache-2.0 | [Puppeteer](https://github.com/puppeteer/puppeteer), headless verification tool, not browser runtime. |
 
 The complete locked Cargo inventory is generated **offline from the actual cached package/toolchain notice files** by `native/third-party.mjs`, including SPDX expressions, archive checksums, full supplied license/copyright texts, the additional Cantera data notice and the actual Rust standard-library inventory. It is included as `native/dist/THIRD_PARTY_NOTICES.md`, `api/dist/THIRD_PARTY_NOTICES.md` and web `licenses/rust-and-dependencies.md`; stdlib assets accompany it. All three distributions include CarLab's `LICENSE`, `NOTICE` and `credits.md`. The portable API has no npm runtime dependencies. Native/API distributions do not include the reference audio.
 
