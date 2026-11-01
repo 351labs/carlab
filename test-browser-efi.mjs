@@ -9,7 +9,7 @@ import puppeteer from 'puppeteer-core';
 
 // Functional acceptance of the compiled UI/worker/worklet, through lm-remote.
 // All observations are synthetic fixtures, not independent engine validation.
-const proof=process.env.ENGINE_LAB_PROOF??'docs/efi/proof/browser';
+const proof=process.env.ENGINE_LAB_PROOF??'output/review-fixes/efi';
 const outDir=process.env.ENGINE_LAB_DIST??'dist/client';
 await mkdir(proof,{recursive:true});
 const temporary=await mkdtemp(join(tmpdir(),'carlab-efi-browser-'));
@@ -32,7 +32,8 @@ try{
  await (await page.createCDPSession()).send('Browser.setDownloadBehavior',{behavior:'allow',downloadPath:temporary});
  page.on('pageerror',e=>errors.push(String(e)));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
  page.on('request',r=>{if(!['GET','HEAD'].includes(r.method()))uploads.push(r.url());});
- await page.goto(`http://127.0.0.1:${port}/${process.env.ENGINE_LAB_QUERY??'?mode=scholar&lang=pt'}`,{waitUntil:'networkidle0'});
+ const target = new URL(`http://127.0.0.1:${port}/${process.env.ENGINE_LAB_QUERY??'?mode=scholar&lang=pt'}`); target.searchParams.set('debug','1');
+ await page.goto(target.href,{waitUntil:'networkidle0'});
  await page.waitForFunction(()=>window.__engineLab&&document.querySelector('#ecu-enable'));
  check('EFI mounts with Rust and is opt-in',await page.evaluate(()=>window.__engineLab.getBackend()==='rust-wasm-v3'&&!window.__engineLab.getPhysical().ecu.enabled&&!window.__engineLab.isRunning()));
  for(const[id,value]of [['propertyModel','nasa7-fixed-composition'],['heatTransferModel','woschni'],['airflowModel','valve-geometry']]){await expand(`#physical-${id}`);await page.select(`#physical-${id}`,value);}

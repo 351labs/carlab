@@ -24,7 +24,7 @@ try{
  check('classic V12 has its own recordings',await page.$eval('#cards audio',a=>a.src.includes('v12-classic')));
  const loadedValue=await page.$$eval('#case option',els=>els.find(e=>e.value.includes('2500')).value);await page.select('#case',loadedValue);
  check('loaded comparison retains fixed 2500 RPM condition',await page.$eval('#condition',e=>e.textContent.includes('2.500')));
- const proof=process.env.ENGINE_LAB_PROOF??'docs/timbre/proof';await mkdir(proof,{recursive:true});await page.screenshot({path:`${proof}/listening-desktop.png`,fullPage:true});
+ const proof=process.env.ENGINE_LAB_PROOF??'output/review-fixes/timbre';await mkdir(proof,{recursive:true});await page.screenshot({path:`${proof}/listening-desktop.png`,fullPage:true});
  await page.setViewport({width:390,height:844});
  check('mobile page has no horizontal overflow',await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1));
  await page.screenshot({path:`${proof}/listening-mobile.png`,fullPage:true});

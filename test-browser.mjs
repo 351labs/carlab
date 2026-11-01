@@ -6,7 +6,7 @@ import { existsSync } from 'node:fs';
 import { createServer } from 'vite';
 import puppeteer from 'puppeteer-core';
 
-const proof=process.env.ENGINE_LAB_PROOF??'docs/proof';
+const proof=process.env.ENGINE_LAB_PROOF??'output/review-fixes/browser';
 await mkdir(proof,{recursive:true});
 const server=await createServer({configFile:'vite.config.ts',server:{port:0,strictPort:false}});
 let browser;
@@ -26,7 +26,8 @@ try {
  page.on('pageerror',error=>errors.push(String(error)));
  page.on('console',message=>{if(message.type()==='error')errors.push(message.text());});
  await page.setViewport({width:1440,height:1100,deviceScaleFactor:1});
- await page.goto(`http://127.0.0.1:${port}/${process.env.ENGINE_LAB_QUERY??'?mode=scholar&lang=pt'}`,{waitUntil:'networkidle0'});
+ const target = new URL(`http://127.0.0.1:${port}/${process.env.ENGINE_LAB_QUERY??'?mode=scholar&lang=pt'}`); target.searchParams.set('debug','1');
+ await page.goto(target.href,{waitUntil:'networkidle0'});
  check('initial audio is off',await page.evaluate(()=>!window.__engineLab.isRunning()&&window.__engineLab.audioState()==='uninitialized'));
  check('eleven original engine presets',await page.$$eval('[data-preset]',elements=>elements.length===11));
  await page.evaluate(()=>{

@@ -7,7 +7,7 @@ import { createServer,preview } from 'vite';
 import puppeteer from 'puppeteer-core';
 import { encodeWav } from './export.ts';
 
-const proof=process.env.ENGINE_LAB_PROOF??'docs/proof/v3';
+const proof=process.env.ENGINE_LAB_PROOF??'output/review-fixes/v3';
 await mkdir(proof,{recursive:true});
 const temporary=await mkdtemp(join(tmpdir(),'carlab-bench-'));
 const staticMode=process.env.ENGINE_LAB_STATIC==='1';
@@ -22,7 +22,8 @@ try{
  const choosePreset=async selector=>{const index=await page.$eval(selector,element=>element.dataset.preset);await page.click('[data-part="engine"]');await page.select('[data-preset-select]',index);};const cdp=await page.createCDPSession();await cdp.send('Browser.setDownloadBehavior',{behavior:'allow',downloadPath:temporary});
  page.on('pageerror',error=>errors.push(String(error)));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});page.on('request',r=>{if(!['GET','HEAD'].includes(r.method()))uploads.push(r.url());});
  await page.setViewport({width:1440,height:1050,deviceScaleFactor:1});
- await page.goto(`http://127.0.0.1:${port}/${process.env.ENGINE_LAB_QUERY??'?mode=scholar&lang=pt'}`,{waitUntil:'networkidle0'});
+ const target = new URL(`http://127.0.0.1:${port}/${process.env.ENGINE_LAB_QUERY??'?mode=scholar&lang=pt'}`); target.searchParams.set('debug','1');
+ await page.goto(target.href,{waitUntil:'networkidle0'});
  check('all new lab benches mount without starting audio',await page.evaluate(()=>['bench-panel','physics-panel','library-panel'].every(id=>document.getElementById(id).children.length>0)&&!window.__engineLab.isRunning()));
  await page.click('[data-tab="mix"]');await page.select('#perspective','cabin');
  check('perspective selection reaches the shared acoustic config',await page.evaluate(()=>window.__engineLab.getConfig().perspective==='cabin'));

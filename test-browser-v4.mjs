@@ -8,7 +8,7 @@ import puppeteer from 'puppeteer-core';
 
 // Run through lm-remote --gpu --lab after the coordinating static build. This
 // checks compiled workers and actual interface actions; it is not a benchmark.
-const proof=process.env.ENGINE_LAB_PROOF??'docs/proof/v4';
+const proof=process.env.ENGINE_LAB_PROOF??'output/review-fixes/v4';
 const outDir=process.env.ENGINE_LAB_DIST??'dist/client';
 await mkdir(proof,{recursive:true});
 const temporary=await mkdtemp(join(tmpdir(),'carlab-v4-browser-'));
@@ -39,7 +39,8 @@ try{
  page.on('pageerror',error=>errors.push(String(error)));
  page.on('console',message=>{if(message.type()==='error')errors.push(message.text());});
  page.on('request',request=>{if(!['GET','HEAD'].includes(request.method()))uploads.push(request.url());});
- await page.goto(`http://127.0.0.1:${port}/${process.env.ENGINE_LAB_QUERY??'?mode=scholar&lang=pt'}`,{waitUntil:'networkidle0'});
+ const target = new URL(`http://127.0.0.1:${port}/${process.env.ENGINE_LAB_QUERY??'?mode=scholar&lang=pt'}`); target.searchParams.set('debug','1');
+ await page.goto(target.href,{waitUntil:'networkidle0'});
  await page.waitForFunction(()=>window.__engineLab&&document.querySelector('#thermal-history')&&document.querySelector('#cycle-analyze'));
  if(process.env.ENGINE_LAB_EXPECT_BACKEND)check('main thread uses the requested computation backend',await page.evaluate(expected=>window.__engineLab.getBackend()===expected,process.env.ENGINE_LAB_EXPECT_BACKEND));
  check('compiled cycle and thermal panels mount without starting audio',await page.evaluate(()=>['cycle-panel','thermal-panel'].every(id=>document.getElementById(id)?.children.length>0)&&!window.__engineLab.isRunning()));

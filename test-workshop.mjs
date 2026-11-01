@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, writeFile, readFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { hostname } from 'node:os';
 import { isIP } from 'node:net';
@@ -7,13 +7,23 @@ import { preview } from 'vite';
 import puppeteer from 'puppeteer-core';
 
 // Functional checks only. Run via lm-remote --host local --gpu; not a benchmark.
-const proof = process.env.ENGINE_LAB_PROOF ?? 'docs/workshop/proof';
+const proof = process.env.ENGINE_LAB_PROOF ?? 'output/review-fixes/workshop';
 await mkdir(proof, { recursive: true });
 const checks = [], errors = [], uploads = [], platformRequests = [], models = {}, translations = {};
 let server, browser, failure;
 const check = (name, value) => { assert.ok(value, name); checks.push(name); };
 try {
-  if (!process.env.CARLAB_TEST_URL) server = await preview({ configFile: 'preview.config.ts', build: { outDir: process.env.ENGINE_LAB_DIST ?? 'dist/client' }, preview: { host: '127.0.0.1', port: 0, strictPort: false } });
+  // Vite preview does not process Cloudflare's _headers; apply the exact global
+  // headers from that file so local browser checks exercise the deployed policy.
+  const headerLines = (await readFile('public/_headers', 'utf8')).split('\n');
+  const globalHeaders = {};
+  for (const line of headerLines.slice(1)) {
+    if (!/^\s/.test(line)) break;
+    const match = line.trim().match(/^([^:]+):\s*(.*)$/);
+    if (match) globalHeaders[match[1]] = match[2];
+  }
+  if (!process.env.CARLAB_TEST_URL) server = await preview({ configFile: 'preview.config.ts', plugins: [{ name: 'test-cloudflare-global-headers', configurePreviewServer(vite) { vite.middlewares.use((_req, res, next) => { for (const [name, value] of Object.entries(globalHeaders)) res.setHeader(name, value); next(); }); } }], build: { outDir: process.env.ENGINE_LAB_DIST ?? 'dist/client' }, preview: { host: '127.0.0.1', port: 0, strictPort: false } });
+
   const executablePath = process.env.CHROME_PATH ?? ['/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', '/Applications/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing'].find(existsSync);
   const args = ['--mute-audio', '--autoplay-policy=user-gesture-required'];
   if (process.env.CARLAB_TEST_DNS_ADDRESS) {
@@ -33,7 +43,23 @@ try {
     else uploads.push(request.url());
   });
   const origin = process.env.CARLAB_TEST_URL ?? `http://127.0.0.1:${server.httpServer.address().port}/`;
-  const target = new URL(origin); target.searchParams.set('mode', 'normal'); target.searchParams.set('lang', 'pt');
+  const noDebug = await browser.newPage();
+  const plain = new URL(origin); plain.searchParams.delete('debug');
+  const plainResponse = await noDebug.goto(plain.href, { waitUntil: 'networkidle0' });
+  const csp = plainResponse.headers()['content-security-policy'] ?? '';
+  check('production page sends the configured CSP and denies framing', csp === globalHeaders['Content-Security-Policy'] && plainResponse.headers()['x-frame-options'] === 'DENY');
+  check('production diagnostics are absent without an explicit debug flag', await noDebug.evaluate(() => !('__engineLab' in window) && !!document.querySelector('#power')));
+  check('CSP blocks inline script and cross-origin requests', await noDebug.evaluate(async () => {
+    const violations = [];
+    document.addEventListener('securitypolicyviolation', event => violations.push(event.effectiveDirective));
+    const script = document.createElement('script'); script.textContent = 'window.__cspInlineRan = true'; document.head.append(script);
+    let fetchBlocked = false;
+    try { await fetch('https://example.invalid/carlab-csp-check'); } catch { fetchBlocked = true; }
+    await new Promise(resolve => setTimeout(resolve, 100));
+    return !window.__cspInlineRan && fetchBlocked && violations.includes('script-src-elem') && violations.includes('connect-src');
+  }));
+  await noDebug.close();
+  const target = new URL(origin); target.searchParams.set('mode', 'normal'); target.searchParams.set('lang', 'pt'); target.searchParams.set('debug', '1');
   const url = target.href;
   await page.goto(url, { waitUntil: 'networkidle0' });
   await page.waitForFunction(() => window.__engineLab?.workshop().meshes > 0 && window.__engineLab.workshop().triangles > 0, { timeout: 30000 });
@@ -94,6 +120,10 @@ try {
   check('Normal pedal controls the physical driver after selecting fuel', await page.$eval('#physical-throttle', element => Number(element.value) === 62));
   await page.click('#power'); await page.waitForFunction(() => !window.__engineLab.isRunning());
   check('the redesigned power control stops playback', true);
+  await page.$eval('#v12-steady-before', audio => audio.play());
+  await page.waitForFunction(() => document.querySelector('#v12-steady-before').currentTime > .1, { timeout: 10000 });
+  check('same-origin reference media plays under the policy', await page.$eval('#v12-steady-before', audio => audio.error === null && audio.duration > 0));
+  await page.$eval('#v12-steady-before', audio => audio.pause());
   await page.click('#export-wav');
   await page.waitForFunction(() => window.__engineLab.getLastDownload()?.name === 'engine-physical.wav', { timeout: 60000 });
   check('Normal WAV export follows physical EFI driving rather than a hidden acoustic scenario', await page.evaluate(() => window.__engineLab.getLastDownload().bytes === 12 * 48000 * 4 + 44));
@@ -135,6 +165,18 @@ try {
   await page.screenshot({ path: `${proof}/desktop-pt.png` });
   const i18n = await page.evaluate(() => window.__engineLab.getI18nDiagnostics());
   await writeFile(`${proof}/translation-coverage.json`, JSON.stringify(i18n, null, 2) + '\n');
+  // Exercise an actual BFCache restoration, preserving the original document.
+  await page.evaluate(() => { window.__bfcacheMarker = 'original'; window.__bfcacheShows = []; addEventListener('pageshow', event => window.__bfcacheShows.push(event.persisted)); });
+  await page.click('#power'); await page.waitForFunction(() => window.__engineLab.isRunning() && window.__engineLab.audioState() === 'running');
+  await page.goto('about:blank', { waitUntil: 'load' });
+  await page.goBack({ waitUntil: 'domcontentloaded', timeout: 15000 });
+  await page.waitForFunction(() => window.__engineLab && window.__bfcacheShows?.includes(true), { timeout: 20000 });
+  check('BFCache restores the original document with audio stopped and powertrain intact', await page.evaluate(() => window.__bfcacheMarker === 'original' && window.__bfcacheShows.includes(true) && !window.__engineLab.isRunning() && Number.isFinite(window.__engineLab.getPowertrainState().rpm)));
+  await page.click('#power');
+  await page.waitForFunction(() => window.__engineLab.isRunning() && window.__engineLab.audioState() === 'running', { timeout: 15000 });
+  await page.evaluate(() => window.__engineLab.selectPreset(3));
+  check('audio and preset selection work after BFCache restoration', await page.evaluate(() => window.__engineLab.getConfig().cylinders === 4 && window.__engineLab.isRunning()));
+  await page.click('#power'); await page.waitForFunction(() => !window.__engineLab.isRunning());
   const fallback = await browser.newPage();
   await fallback.evaluateOnNewDocument(() => {
     const original = HTMLCanvasElement.prototype.getContext;
