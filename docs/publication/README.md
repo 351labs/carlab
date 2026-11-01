@@ -2,6 +2,8 @@
 
 The owner requested public visibility for `351labs/carlab` after the adversarial findings were corrected. Copyright ownership was explicitly confirmed in [ORIGIN.md](../licensing/ORIGIN.md); the license, complete credits, third-party exceptions and audio/data provenance are recorded in the repository. The [fix report](../review/fixes-2026-11-01.md) closes the prior release findings.
 
+**Published:** https://github.com/351labs/carlab. GitHub confirmed public visibility after source `66e1c547d7a592e88f0e3c64b7de21df1c547474` was pushed. Anonymous repository, Apache license and credits requests returned HTTP 200. GitHub recognizes `Apache-2.0`; secret scanning and secret-scanning push protection are enabled. See the [provider confirmation](evidence/github-publication.json).
+
 ## Final dependency cleanup
 
 The final npm check reported 16 dependency findings (14 high, 2 moderate) in development/build/test tooling. The runtime-only audit reported zero. These findings were not attributed to the browser's Three.js runtime or to the Rust model.
@@ -33,6 +35,6 @@ The [high-confidence history check](evidence/history-scan.json) found no credent
 
 ## Publication scope
 
-The GitHub source is prepared for public visibility. Current README and deployment introductions no longer claim that it is private. Historical deployment/verification records preserve their original visibility context. The npm manifests remain `private: true` to prevent accidental registry publication; that is independent of GitHub visibility.
+The GitHub source is public. Current README and deployment introductions no longer claim that it is private. Historical deployment/verification records preserve their original visibility context. The npm manifests remain `private: true` to prevent accidental registry publication; that is independent of GitHub visibility.
 
 The running website remains the separately verified application source `032ce18`, Cloudflare version `fe1826b2-e846-4cee-9822-ce6443af899c`. Repository publication and development-tool updates do not require changing that deployed runtime. No new model-accuracy or cross-browser-support claim is introduced.

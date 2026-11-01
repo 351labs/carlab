@@ -1,0 +1,19 @@
+{
+  "confirmedAt": "2026-11-01T22:13:08.317124+00:00",
+  "repository": "351labs/carlab",
+  "url": "https://github.com/351labs/carlab",
+  "visibility": "public",
+  "private": false,
+  "publicationSourceCommit": "66e1c547d7a592e88f0e3c64b7de21df1c547474",
+  "license": "Apache-2.0",
+  "homepage": "https://carlab.351labs.xyz/",
+  "anonymousVerification": {
+    "repositoryStatus": 200,
+    "licenseStatus": 200,
+    "creditsStatus": 200,
+    "licenseSha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+  },
+  "secretScanning": "enabled",
+  "secretScanningPushProtection": "enabled",
+  "scope": "Repository visibility/settings and anonymous source access. The deployed application remains source 032ce18."
+}
