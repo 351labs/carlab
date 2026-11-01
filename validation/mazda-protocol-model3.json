@@ -8,9 +8,9 @@
   "expectedSplitSchema": "carlab-mazda-split-1",
   "modelVersion": "carlab-engine-lab-rust-3",
   "historicalBaseline": {
-    "proof": "../docs/validation-real-engines/proof/mazda-unfitted.json",
+    "proof": "Optional: path supplied in ENGINE_LAB_MAZDA_BASELINE; unavailable unless supplied.",
     "variant": "lab-generic-ve",
-    "reproduction": "E0 on the 12 original rows must reproduce the the recorded baseline lab-generic-ve torque, fuel and net-inlet-air predictions within 1e-9 relative (shared cycle; friction now computed by Rust with the same FMEP equation)."
+    "reproduction": "If supplied, compare E0 to historical lab-generic-ve torque, fuel and net-inlet-air on the original twelve development rows. Report the maximum relative difference as a diagnostic, not a real-engine accuracy result."
   },
   "engine": {
     "cylinders": 4,

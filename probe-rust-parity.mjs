@@ -9,7 +9,7 @@ import {normalizePhysicalConfig,evaluateEngine,getCylinderCycle,Powertrain} from
 import {exhaustPressureLoss} from './gas-path.ts';
 import {DERIVED_ABSOLUTE_FLOORS,DYNAMIC_ABSOLUTE_FLOORS,fieldAbsoluteFloor} from './parity-policy.mjs';
 
-const path='docs/proof/rust/parity-diagnostics.json';
+const path='output/proof/rust/parity-diagnostics.json';
 const core=await loadEngineLab({wasm:new Uint8Array(await readFile(new URL('./native/dist/carlab_engine_lab.wasm',import.meta.url)))});
 const fields=new Map(),structuralMismatches=[],exceptions=[],binDivergences=[],cases=[],trajectories=[],conditionedV12=[];
 const tolerance={normalization:[2e-7,1e-10],raw:[2e-7,1e-10],cycle:[5e-7,1e-9],estimate:[5e-7,1e-9],dynamic:[2e-5,1e-7],held:[2e-5,1e-7]};
@@ -89,7 +89,7 @@ try{
  core.dispose();
  const perField=[...fields.values()].sort((a,b)=>b.maxGateRatio-a.maxGateRatio);
  const report={scope:'Diagnostic f64 Rust/WASM versus TypeScript v5; original generic diagnostics plus documented unit-aware aggregate gates; model equations unchanged; no timing/performance claim.',configuration:{presets:presets.map(x=>x.id),pointsPerPreset:3,rawCycleCases:4,dynamicCases:['switch','constant'],stepsEach:2400,dt:1/240},numberComparisons:numbers,structuralMismatches,exceptions,binDivergences,parityPolicy:{derivedAbsoluteFloors:DERIVED_ABSOLUTE_FLOORS,dynamicAbsoluteFloors:DYNAMIC_ABSOLUTE_FLOORS,rawTraceConditioning:'Diagnostic only; no claim that every instantaneous calibrated valve-flow trace meets the generic gate.'},summary:{fields:perField.length,aggregateFieldsOutsideUnitAwareGate:perField.filter(x=>x.field.startsWith('estimate.')||x.field.startsWith('held.')||x.field.startsWith('dynamic.')).filter(x=>x.unitAwareGateFailures).length,fieldsOutsideCurrentGenericGate:perField.filter(x=>x.gateFailures).length,maxGateRatio:perField[0]?.maxGateRatio},perField,cases,trajectories,conditionedV12};
- await mkdir('docs/proof/rust',{recursive:true});await mkdir('output',{recursive:true});
+ await mkdir('output/proof/rust',{recursive:true});await mkdir('output',{recursive:true});
  const fullText=JSON.stringify(report,null,2)+'\n',fullPath='output/parity-diagnostics-full.json';await writeFile(fullPath,fullText);
  const {perField:allFields,cases:allCases,trajectories:allTrajectories,...header}=report;
  const compact={...header,conditionedV12:conditionedV12.map(c=>({...c,configDeltas:Object.fromEntries(Object.entries(c.configDeltas).filter(([,x])=>x.absolute>0||x.equal===false)),solves:c.solves.map(({traces,config,...summary})=>summary)})),format:'compact-parity-diagnostic-1',fullDiagnostic:{path:fullPath,sha256:createHash('sha256').update(fullText).digest('hex'),bytes:Buffer.byteLength(fullText),reproduce:'node probe-rust-parity.mjs (through lm-remote)'},derivedFields:allFields.filter(x=>x.field.startsWith('estimate.')),worstGenericFields:allFields.slice(0,16),trajectorySummaries:allTrajectories.map(({checkpoints,...summary})=>summary),operatingPoints:allCases.map(x=>x.context).filter(Boolean)};

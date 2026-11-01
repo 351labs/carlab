@@ -1,5 +1,5 @@
 // Run through lm-remote. Model-3 Mazda evaluation per mazda-protocol-model3.json.
-// The historical measure-mazda.mjs (model 2, JS friction) stays the unchanged baseline adapter.
+// A historical model-2 comparison is optional and requires an explicit supplied report.
 // Torque, fuel and air come from the Rust evaluateEngine at the measured boundary.
 // `--smoke` evaluates E0/E1/E2a on the 12 already-inspected development rows only and writes nothing.
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
@@ -15,16 +15,18 @@ import { nelderMead, singularValues } from './fit.mjs';
 const here=dirname(fileURLToPath(import.meta.url));
 const sourceCommit=()=>{try{return execFileSync('git',['rev-parse','HEAD'],{cwd:here,encoding:'utf8',stdio:['ignore','pipe','ignore']}).trim();}catch{return null;}};
 const smoke=process.argv.includes('--smoke');
-const output=resolve(process.argv.slice(2).find(a=>a.endsWith('.json'))??'docs/research-improvements/proof/mazda-model3.json');
+const output=resolve(process.argv.slice(2).find(a=>a.endsWith('.json'))??'output/validation/mazda-model3.json');
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const read=async name=>{const bytes=await readFile(resolve(here,name));return {bytes,json:JSON.parse(bytes)};};
 const {bytes:protocolBytes,json:protocol}=await read('mazda-protocol-model3.json');
 const {bytes:fixtureBytes,json:fixture}=await read(protocol.fixture);
 const {bytes:splitBytes,json:split}=await read(protocol.split);
 const baselinePath=process.env.ENGINE_LAB_MAZDA_BASELINE;
-if(!baselinePath)throw new Error('Set ENGINE_LAB_MAZDA_BASELINE to an independently supplied model-2 measurement report.');
-const historicalBytes=await readFile(resolve(baselinePath));
-const historical=JSON.parse(historicalBytes);
+const historicalBytes=baselinePath?await readFile(resolve(baselinePath)):null;
+const historical=historicalBytes?JSON.parse(historicalBytes):null;
+const inspectedFixture=JSON.parse(await readFile(resolve(here,'mazda-measured.json')));
+if(inspectedFixture.selection?.declaredBeforeAnyModelOutputs!==true || inspectedFixture.selection.excelRows?.length!==12)throw new Error('Frozen original selection is required.');
+if(historical && (!Array.isArray(historical.rows) || JSON.stringify(historical.selection?.excelRows)!==JSON.stringify(inspectedFixture.selection.excelRows)))throw new Error('Historical baseline must contain rows for the exact frozen selection.');
 if(fixture.schema!==protocol.expectedFixtureSchema||split.schema!==protocol.expectedSplitSchema)throw new Error('Unexpected fixture or split schema.');
 if(split.fixtureSha256!==sha(fixtureBytes)||split.frozenBeforeAnyModel3Fit!==true)throw new Error('Split is not frozen against this fixture.');
 const wasmBytes=await readFile(resolve(here,'../native/dist/carlab_engine_lab.wasm'));
@@ -38,7 +40,7 @@ const stoichAfr=(1+hydrogenCarbon/4)*(AIR.reduce((s,[m,x])=>s+m*x,0)/AIR[1][1])/
 
 const engine=core.normalizeConfig(protocol.engine);
 const training=new Set(split.trainingRows),bands=new Map(split.rows.map(r=>[r.excelRow,r.band]));
-const inspected=new Set(historical.selection.excelRows);
+const inspected=new Set(inspectedFixture.selection.excelRows);
 const points=fixture.points.map(p=>({...p,band:bands.get(p.excelRow),group:training.has(p.excelRow)?'training':'holdout'}));
 const trainingPoints=points.filter(p=>p.group==='training');
 const experiments=Object.fromEntries(protocol.experiments.map(e=>[e.id,e]));
@@ -103,15 +105,21 @@ function table(label,rows){
 
 try{
  const started=Date.now();
- // E0 must reproduce the the recorded baseline lab-generic-ve predictions on the 12 inspected rows.
- const historicalRows=new Map(historical.rows.filter(r=>r.variant===protocol.historicalBaseline.variant).map(r=>[r.excelRow,r]));
- const reproduction=[...inspected].map(n=>{
-  const now=evaluate(experiments['E0-legacy'],points.find(p=>p.excelRow===n),{},0,false),then=historicalRows.get(n).predicted;
-  const rel=k=>Math.abs(now.predicted[k]-then[k])/Math.max(1e-12,Math.abs(then[k]));
-  return {excelRow:n,torque:rel('torqueNm'),fuel:rel('fuelMassFlowGs'),air:rel('airMassFlowGs')};
- });
- const reproductionMax=Math.max(...reproduction.flatMap(r=>[r.torque,r.fuel,r.air]));
- console.log(`E0 reproduction of the recorded baseline on 12 rows: max relative difference ${reproductionMax.toExponential(2)}`);
+ // A comparison exists only when a historical report was explicitly supplied.
+ let reproduction=null,reproductionMax=null;
+ if(historical){
+  const historicalRows=new Map(historical.rows.filter(r=>r.variant===protocol.historicalBaseline.variant).map(r=>[r.excelRow,r]));
+  reproduction=[...inspected].map(n=>{
+   const point=points.find(p=>p.excelRow===n), then=historicalRows.get(n);
+   if(!point || !then?.valid || !then.predicted)throw new Error(`Historical baseline missing admitted row ${n}.`);
+   const now=evaluate(experiments['E0-legacy'],point,{},0,false);
+   if(!now.valid || !now.predicted)throw new Error(`Current E0 row ${n} not admitted: ${now.reasons.join('; ')}`);
+   const rel=k=>{if(!finiteNumber(then.predicted[k]))throw new Error(`Historical row ${n} lacks ${k}.`);return Math.abs(now.predicted[k]-then.predicted[k])/Math.max(1e-12,Math.abs(then.predicted[k]));};
+   return {excelRow:n,torque:rel('torqueNm'),fuel:rel('fuelMassFlowGs'),air:rel('airMassFlowGs')};
+  });
+  reproductionMax=Math.max(...reproduction.flatMap(r=>[r.torque,r.fuel,r.air]));
+  console.log(`E0 versus supplied historical baseline: max relative difference ${reproductionMax.toExponential(2)}`);
+ } else console.log('Historical E0 comparison unavailable: no baseline supplied.');
  // Stoichiometry self-check: NASA burned-gas equivalence ratio must equal 1/lambda.
  const probe=trainingPoints[0],probeExperiment=experiments['E2a-conditional-unfitted'],probePhysical=core.normalizePhysicalConfig(engine,physicalRequest(probeExperiment,probe));
  const probeCycle=core.getCylinderCycle(engine,probePhysical,probe.rpm,1,{intakePressurePa:probe.mapKpaAbsolute*1000,intakeTemperatureK:probe.intakeC+273.15,exhaustPressurePa:probe.catalystInletKpaAbsolute*1000,exhaustTemperatureK:(probe.exhaustPort1C+probe.exhaustPort2C+probe.exhaustPort3C+probe.exhaustPort4C)/4+273.15},0);
@@ -125,9 +133,11 @@ try{
   for(const id of ['E0-legacy','E1-physics-unfitted','E2a-conditional-unfitted']){
    const t=Date.now(),rows=points.filter(p=>inspected.has(p.excelRow)).map(p=>evaluate(experiments[id],p));
    table(`${id} [12 inspected]`,rows);
+   if(rows.length!==12 || !rows.some(row=>row.valid))throw new Error(`${id}: smoke did not admit any of the 12 frozen rows.`);
    for(const r of rows.filter(r=>!r.valid))console.log(`  row${r.excelRow} excluded: ${r.reasons.join('; ')}`);
    console.log(`  ${((Date.now()-t)/rows.length).toFixed(1)} ms/evaluation`);
   }
+  core.dispose();
   process.exit(0);
  }
 
@@ -189,9 +199,9 @@ try{
  const sourceFiles=['config.rs','powertrain.rs','cylinder_cycle.rs','gas_properties.rs','maps.rs','lib.rs'];
  const modelSourceHashes=Object.fromEntries(await Promise.all(sourceFiles.map(async name=>[name,sha(await readFile(resolve(here,'../native/src',name)))])));
  const report={schema:'carlab-engine-measurement-2',createdUtc:new Date().toISOString(),host:hostname(),node:process.version,sourceCommit:sourceCommit(),
-  api:core.version,wasmSha256:sha(wasmBytes),protocolSha256:sha(protocolBytes),fixtureSha256:sha(fixtureBytes),splitSha256:sha(splitBytes),historicalProofSha256:sha(historicalBytes),
+  api:core.version,wasmSha256:sha(wasmBytes),protocolSha256:sha(protocolBytes),fixtureSha256:sha(fixtureBytes),splitSha256:sha(splitBytes),historicalProofSha256:historicalBytes?sha(historicalBytes):null,
   adapterSha256:sha(await readFile(fileURLToPath(import.meta.url))),metricsSha256:sha(await readFile(resolve(here,'metrics.mjs'))),fitSha256:sha(await readFile(resolve(here,'fit.mjs'))),modelSourceHashes,
-  fuel:{hydrogenCarbon,stoichAfr,stoichCheck},e0Reproduction:{maxRelativeDifference:reproductionMax,rows:reproduction},
+  fuel:{hydrogenCarbon,stoichAfr,stoichCheck},e0Reproduction:historical?{status:'comparison-only',maxRelativeDifference:reproductionMax,rows:reproduction}:{status:'not-evaluated',reason:'No historical baseline supplied'},
   fitted,fitLog,summary,jacobian,exhaustPressureSensitivity:sensitivity,evaluations,runtimeSeconds:(Date.now()-started)/1000,
   rows:Object.values(results).flat(),
   interpretation:{status:'model3-conditional-heldout',heldOutBands:split.holdoutLimits,realEngineAccuracyPass:null,

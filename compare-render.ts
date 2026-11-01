@@ -8,7 +8,7 @@ import { renderClip, MODEL_VERSION } from './offline.ts';
 import { encodeWav } from './export.ts';
 
 const rawRoot = 'output/comparison/raw';
-const out = 'docs/analysis/comparison';
+const out = 'output/analysis/comparison';
 await mkdir(out, {recursive:true});
 await mkdir(join(rawRoot,'after'), {recursive:true});
 

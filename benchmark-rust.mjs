@@ -12,7 +12,7 @@ import { EngineDSP } from './dsp.ts';
 import { loadEngineLab } from './api/dist/index.js';
 const iterations=7,warmup=3,frames=240000,steps=2400,dt=1/240,sampleRate=48000;
 const config=defaultConfig,physical=normalizePhysicalConfig(config),cycle=normalizeCylinderCycleConfig({rpm:3000}),state={rpm:3000,load:.6,throttle:.6};
-const temporary=await mkdtemp(join(tmpdir(),'carlab-rust-bench-')),out=process.env.ENGINE_LAB_BENCH_PROOF??'docs/proof/rust';
+const temporary=await mkdtemp(join(tmpdir(),'carlab-rust-bench-')),out=process.env.ENGINE_LAB_BENCH_PROOF??'output/proof/rust';
 await mkdir(out,{recursive:true});const wasm=await readFile(new URL('./native/dist/carlab_engine_lab.wasm',import.meta.url)),core=await loadEngineLab({wasm:new Uint8Array(wasm)});
 function measure(run){const elapsedMs=[],checksums=[];for(let i=-warmup;i<iterations;i++){const start=performance.now(),checksum=run(),elapsed=performance.now()-start;assert.ok(Number.isFinite(checksum));if(i>=0){elapsedMs.push(elapsed);checksums.push(checksum);}}return {elapsedMs,checksums};}
 const cases={

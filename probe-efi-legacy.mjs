@@ -31,6 +31,6 @@ try{
  const engine=presets.find(p=>p.id==='v-twin-1-2').config,physical=previous.normalizePhysicalConfig(engine),accepted=oldCore.getCylinderCycle(engine,physical,engine.idleRpm,.2),refinement=[];
  for(const stepDeg of [2,.5,.25]){const config={...accepted.config,stepDeg};for(const[backend,cycle]of[['wasm',newCore.solveCylinderCycle(config)],['typescript',solveCylinderCycle(config)]])refinement.push({backend,stepDeg,pumpingWorkJ:cycle.pumpingWorkJ,pumpingTorqueNm:-cycle.pumpingWorkJ*engine.cylinders/(4*Math.PI),peakTemperatureK:cycle.peakTemperatureK,periodicMassRelativeError:cycle.periodicMassRelativeError});}
  const summary={baseline:'user-supplied legacy fixture (provenance not verified by this script)',comparisons,legacyDifferences,baselineCrossBackendViolations,refinement,rows,scope:'Same-host original 0.5 WASM/source versus EFI disabled WASM/source; numerical diagnostic, not timing.'};
- await mkdir('docs/efi/proof',{recursive:true});await writeFile('docs/efi/proof/legacy-comparison.json',JSON.stringify(summary,null,2)+'\n');
+ await mkdir('output/proof/efi',{recursive:true});await writeFile('output/proof/efi/legacy-comparison.json',JSON.stringify(summary,null,2)+'\n');
  console.log(JSON.stringify({comparisons,legacyDifferences,baselineCrossBackendViolations,refinement},null,2));
 }finally{oldCore.dispose();newCore.dispose();}

@@ -3,7 +3,7 @@
 import json
 from pathlib import Path
 
-root = Path('docs/analysis')
+root = Path('output/analysis')
 rows = []
 for name in ['v10-steady', 'v12-steady', 'v10-idle', 'v12-idle']:
     item = {'id': name}
