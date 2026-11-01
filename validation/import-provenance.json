@@ -1,6 +1,6 @@
 {
   "scope": "metadata-schema-and-source-provenance-only",
-  "method": "Schema and model identifiers were renamed; the split fixture hash was recomputed; obsolete run identifiers were removed. Measured point arrays, split membership and legacy numerical cases were not changed. Canonical SHA-256 sorts object keys recursively and uses compact UTF-8 JSON. EPA citation and data-use metadata were corrected; the split fixture hash was recomputed. priorDerivedSha256 preserves the prior migration-stage bytes; originalSha256 remains the pre-migration import.",
+  "method": "Schema and model identifiers were renamed; the split fixture hash was recomputed; obsolete run identifiers were removed. Measured point arrays, split membership and legacy numerical cases were not changed. Canonical SHA-256 sorts object keys recursively and uses compact UTF-8 JSON. EPA citation and data-use metadata were corrected; the split fixture hash was recomputed. priorDerivedSha256 preserves the prior migration-stage bytes; originalSha256 remains the pre-migration import. The current-model protocol now marks a separately supplied historical baseline optional; its prior derived hash is retained. No protocol numerical inputs were changed.",
   "files": {
     "mazda-measured.json": {
       "originalSha256": "a549a16ad15c497f4e8d586dc44d4651919ee9633bdbf3cf2b9e4cdebb5f282b",
@@ -31,7 +31,8 @@
     },
     "mazda-protocol-model3.json": {
       "originalSha256": "112993e520329b0f5d9b662ee0ea2139b73fefea466e5a0ebc835a5b3c9a9302",
-      "derivedSha256": "c94423892720027591f9ee021a1c93bf2b116005543e94c35fcd20f1d03369a0"
+      "derivedSha256": "3bfff4a0f0ea27551f8dbd99896bd33f57cb4ae9456928252676b929c7b03aec",
+      "priorDerivedSha256": "c94423892720027591f9ee021a1c93bf2b116005543e94c35fcd20f1d03369a0"
     }
   }
 }
