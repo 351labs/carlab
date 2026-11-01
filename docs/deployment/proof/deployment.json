@@ -1,0 +1,82 @@
+{
+  "schema": "carlab-deployment-1",
+  "date": "2026-11-01",
+  "application": "CarLab",
+  "url": "https://carlab.351labs.xyz/",
+  "repository": {
+    "url": "https://github.com/351labs/carlab",
+    "private": true,
+    "fork": false,
+    "defaultBranch": "main"
+  },
+  "release": {
+    "sourceCommit": "985f45136e41d4851ea6168c12bc68fd58b895a5",
+    "worker": "carlab",
+    "cloudflareVersionId": "52562b18-e420-41ab-9cd9-43f550f59e67",
+    "staticInventoryFiles": 45,
+    "staticInventoryBytes": 12874060,
+    "mainJs": "assets/index-BMqY_a0k.js",
+    "mainJsSha256": "128ae0fae63e224e6330535e91baa61da2855aaffd1af9b383e49e39ad8b4f61",
+    "wasmSha256": "6bd40eda5dc7a32be88efea66fdc1d0c1e7dccb4ff923aff62998ec9e16779aa",
+    "liveWasmMatches": true,
+    "liveJsMatches": true,
+    "tlsCertificateVerified": true,
+    "htmlHttpStatus": 200,
+    "missingJsHttpStatus": 404,
+    "htmlCacheControl": "no-cache",
+    "hashedAssetCacheControl": "public, max-age=31536000, immutable",
+    "wasmContentType": "application/wasm"
+  },
+  "validation": {
+    "coreJob": "carlab-1101-124844-37925",
+    "freshNpmCiExit": 0,
+    "nativeAndWasmBuildExit": 0,
+    "typecheckExit": 0,
+    "testAllExit": 0,
+    "fixtureJob": "carlab-1101-125220-46072",
+    "fixtureChecksPassed": 10,
+    "standaloneBrowserJob": "carlab-1101-125403-48569",
+    "standaloneBrowserChecksPassed": 127,
+    "packedTypeScriptConsumerPassed": true,
+    "apiNpmRuntimeDependencies": 0,
+    "navigationFixLocalJob": "carlab-1101-130130-60801",
+    "navigationFixLocalChecksPassed": 52,
+    "productionBrowserJob": "carlab-1101-130329-64337",
+    "productionBrowserChecksPassed": 52,
+    "productionScriptErrors": [],
+    "applicationUploads": [],
+    "cloudflarePlatformRequestCount": 1,
+    "finalHeadersBuildJob": "carlab-1101-130422-66055",
+    "finalHeadersOnlyChange": true,
+    "referencePerformanceBenchmark": false
+  },
+  "dns": {
+    "authoritative": "miki.ns.cloudflare.com",
+    "publicResolversVerified": [
+      "1.1.1.1",
+      "8.8.8.8"
+    ],
+    "publicAddressesObserved": [
+      "104.21.46.251",
+      "172.67.169.141"
+    ],
+    "localResolver": "Earlier NXDOMAIN negative cache observed",
+    "browserDnsAddressOverride": "104.21.46.251",
+    "systemDnsChanged": false,
+    "trustStoreChanged": false
+  },
+  "supersededVersions": [
+    {
+      "source": "cdf5c10071cb55428723dc46234531d0b0ebd763",
+      "cloudflareVersionId": "011a4e69-6907-48e5-b45b-34899e41ec44",
+      "productionJob": "carlab-1101-125840-55929",
+      "issue": "Native handles were disposed before committed navigation; corrected in 60017c6."
+    },
+    {
+      "source": "60017c6a505c8990b41117f01353bff74c217569",
+      "cloudflareVersionId": "aa0732b4-df4e-461f-a36e-b2d633a5b495",
+      "status": "Passed production functional check; final header-only release retains identical JavaScript and WASM payloads."
+    }
+  ],
+  "scope": "Functional standalone build, package and HTTPS deployment evidence. No performance benchmark or independent real-engine validation claim."
+}

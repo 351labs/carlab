@@ -12,7 +12,7 @@ Install Node.js, Rust and the `wasm32-unknown-unknown` target. The Rust build us
 
 ```sh
 npm ci
-npm run build
+lm-remote --host local --timeout 12 --pull native/dist --pull api/dist --pull dist --pull .cloudflare/output/v0 npm run build
 npm run dev
 ```
 
@@ -22,7 +22,7 @@ The build compiles the WASM core, packages the API and builds the web applicatio
 lm-remote --host local npm run test:all
 ```
 
-The intended deployment is [carlab.351labs.xyz](https://carlab.351labs.xyz), with a private GitHub repository at `351labs/carlab`. Deployment status and validation are recorded separately when available.
+Production is [carlab.351labs.xyz](https://carlab.351labs.xyz). The independent source repository is [351labs/carlab](https://github.com/351labs/carlab), private within the organization. See [deployment, verification and update instructions](docs/deployment/README.md).
 
 ## Notices
 

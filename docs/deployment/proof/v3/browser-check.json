@@ -1,0 +1,32 @@
+{
+  "host": "Davis-MacBook-Pro.local",
+  "browser": "Chrome/156.0.8078.80",
+  "buildMode": "compiled-static",
+  "checks": [
+    "all new lab benches mount without starting audio",
+    "perspective selection reaches the shared acoustic config",
+    "free-rev RPM responds to the torque/inertia model",
+    "loaded vehicle model accelerates and drives audio",
+    "shift control changes physical transmission gear",
+    "named library saves literal text and complete physical config",
+    "library reload restores both acoustic and physical parameters",
+    "saving a changed voice creates a second revision",
+    "saved exhaust can be applied without changing engine architecture",
+    "worker prepares current and A/B clips at a common admissible RPM",
+    "blind listening initially hides source identities",
+    "reveal preserves the collected listening rating",
+    "bench playback excludes live synthesis",
+    "starting live stops bench playback",
+    "local uploaded reference is cropped and analyzed with generated candidates",
+    "downloaded report retains prepared settings after controls change",
+    "failed reference decode cannot silently reuse prior audio",
+    "bank audit uses actual generated loops and exposes prototype limitations",
+    "physical-drive WAV uses the export worker and current physical inputs",
+    "new lab panels fit a mobile viewport",
+    "local references trigger no upload requests",
+    "no browser or audio-worklet errors"
+  ],
+  "errors": [],
+  "uploads": [],
+  "scope": "Headless functional checks through lm-remote; no subjective fidelity or performance timing claim."
+}

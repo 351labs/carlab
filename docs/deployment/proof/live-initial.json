@@ -1,0 +1,203 @@
+{
+  "host": "Davis-MacBook-Pro.local",
+  "target": "https://carlab.351labs.xyz/",
+  "dnsAddressOverride": "104.21.46.251",
+  "checks": [
+    "Rust backend and real WebGL geometry initialize without starting audio",
+    "Normal hides research and calibration controls",
+    "Normal retains listening, pedal, RPM and WAV controls",
+    "engine loads a distinct inspectable 3D assembly",
+    "engine accepts cutaway and exploded views",
+    "turbo loads a distinct inspectable 3D assembly",
+    "turbo accepts cutaway and exploded views",
+    "exhaust loads a distinct inspectable 3D assembly",
+    "exhaust accepts cutaway and exploded views",
+    "injection loads a distinct inspectable 3D assembly",
+    "injection accepts cutaway and exploded views",
+    "instruments loads a distinct inspectable 3D assembly",
+    "instruments accepts cutaway and exploded views",
+    "the visible engine selector updates the actual engine topology",
+    "the workshop displacement control updates the simulation",
+    "the compact turbo recipe reaches the actual configuration",
+    "exhaust recipe updates acoustic and explicitly assumed physical controls",
+    "Enthusiast reveals tuning, comparisons and EFI",
+    "Scholar reveals cycle, thermal and provenance workflows",
+    "changing experience modes preserves the engine",
+    "diesel selection enables the Rust DI controller",
+    "E85 selection restores spark injection and the requested blend",
+    "Normal exposes retained physical brake and gear instead of hiding them",
+    "Normal physical controls write through to the shared driver",
+    "the redesigned controls start real Rust AudioWorklet combustion",
+    "Normal pedal controls the physical driver after selecting fuel",
+    "the redesigned power control stops playback",
+    "Normal WAV export follows physical EFI driving rather than a hidden acoustic scenario",
+    "pt switches the visible workshop language",
+    "en switches the visible workshop language",
+    "zh switches the visible workshop language",
+    "ja switches the visible workshop language",
+    "es switches the visible workshop language",
+    "ko switches the visible workshop language",
+    "fr switches the visible workshop language",
+    "all seven locales have distinct workshop titles",
+    "language changes preserve the simulation configuration",
+    "language changes preserve user-entered JSON exactly",
+    "Japanese also translates the edited-engine heading and voice tags",
+    "language and mode survive reload through the shareable URL",
+    "mobile layout has no horizontal document overflow",
+    "camera buttons provide keyboard-focusable alternatives to dragging",
+    "en mobile layout fits the viewport",
+    "zh mobile layout fits the viewport",
+    "ja mobile layout fits the viewport",
+    "es mobile layout fits the viewport",
+    "ko mobile layout fits the viewport",
+    "fr mobile layout fits the viewport",
+    "WebGL-unavailable fallback leaves audio and mathematical controls usable"
+  ],
+  "models": {
+    "engine": {
+      "available": true,
+      "part": "engine",
+      "loading": false,
+      "error": "",
+      "meshes": 108,
+      "cutaway": false,
+      "exploded": 0,
+      "triangles": 10448,
+      "calls": 109,
+      "geometries": 109,
+      "textures": 2,
+      "metadata": {
+        "partId": "engine"
+      }
+    },
+    "turbo": {
+      "available": true,
+      "part": "turbo",
+      "loading": false,
+      "error": "",
+      "meshes": 70,
+      "cutaway": false,
+      "exploded": 0,
+      "triangles": 19840,
+      "calls": 43,
+      "geometries": 43,
+      "textures": 2,
+      "metadata": {
+        "turboFitted": false,
+        "presentation": "illustrative"
+      }
+    },
+    "exhaust": {
+      "available": true,
+      "part": "exhaust",
+      "loading": false,
+      "error": "",
+      "meshes": 35,
+      "cutaway": false,
+      "exploded": 0,
+      "triangles": 6992,
+      "calls": 25,
+      "geometries": 25,
+      "textures": 2,
+      "metadata": {}
+    },
+    "injection": {
+      "available": true,
+      "part": "injection",
+      "loading": false,
+      "error": "",
+      "meshes": 41,
+      "cutaway": false,
+      "exploded": 0,
+      "triangles": 5008,
+      "calls": 38,
+      "geometries": 38,
+      "textures": 2,
+      "metadata": {
+        "enabled": false,
+        "physicalActive": false,
+        "configuration": "schematic",
+        "assembly": "portInjectionSpark",
+        "geometry": "schematic",
+        "spray": "illustrative-not-cfd",
+        "animationSource": "schematic"
+      }
+    },
+    "instruments": {
+      "available": true,
+      "part": "instruments",
+      "loading": false,
+      "error": "",
+      "meshes": 119,
+      "cutaway": false,
+      "exploded": 0,
+      "triangles": 20324,
+      "calls": 120,
+      "geometries": 120,
+      "textures": 6,
+      "metadata": {
+        "partId": "instruments",
+        "signals": {
+          "rpm": "telemetry.rpm",
+          "boost": "telemetry.boost (gauge bar)",
+          "throttle": "telemetry.throttle",
+          "load": "telemetry.load",
+          "speed": "unavailable"
+        }
+      }
+    }
+  },
+  "translations": {
+    "pt": {
+      "title": "A oficina",
+      "engine": "01Motor\u2197",
+      "power": "Ligar motor",
+      "mode": "Normal"
+    },
+    "en": {
+      "title": "The workshop",
+      "engine": "01Engine\u2197",
+      "power": "Start engine",
+      "mode": "Normal"
+    },
+    "zh": {
+      "title": "\u5de5\u4f5c\u5ba4",
+      "engine": "01\u53d1\u52a8\u673a\u2197",
+      "power": "\u542f\u52a8\u53d1\u52a8\u673a",
+      "mode": "\u666e\u901a"
+    },
+    "ja": {
+      "title": "\u30ef\u30fc\u30af\u30b7\u30e7\u30c3\u30d7",
+      "engine": "01\u30a8\u30f3\u30b8\u30f3\u2197",
+      "power": "\u30a8\u30f3\u30b8\u30f3\u59cb\u52d5",
+      "mode": "\u6a19\u6e96"
+    },
+    "es": {
+      "title": "El taller",
+      "engine": "01Motor\u2197",
+      "power": "Arrancar motor",
+      "mode": "Normal"
+    },
+    "ko": {
+      "title": "\uc791\uc5c5\uc2e4",
+      "engine": "01\uc5d4\uc9c4\u2197",
+      "power": "\uc5d4\uc9c4 \uc2dc\ub3d9",
+      "mode": "\uc77c\ubc18"
+    },
+    "fr": {
+      "title": "L\u2019atelier",
+      "engine": "01Moteur\u2197",
+      "power": "D\u00e9marrer le moteur",
+      "mode": "Normal"
+    }
+  },
+  "errors": [
+    "In: EngineLabError: This native handle has been disposed."
+  ],
+  "uploads": [
+    "https://carlab.351labs.xyz/cdn-cgi/challenge-platform/[security-check-redacted]"
+  ],
+  "failure": "AssertionError [ERR_ASSERTION]: no script or console errors occurred",
+  "scope": "Functional headless Chrome checks; no performance benchmark or real-engine fidelity claim.",
+  "note": "Initial production check: native-handle lifetime failure on navigation; Cloudflare-injected security POST recorded separately in the revised harness."
+}
