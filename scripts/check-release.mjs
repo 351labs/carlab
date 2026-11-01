@@ -40,4 +40,13 @@ for (const file of ['LICENSE', 'NOTICE', 'credits.md', 'licenses/cantera-BSD-3-C
   assert.deepEqual(await readFile(resolve(output, 'assets', file)), await readFile(resolve(root, file)), `Published ${file} matches its source.`);
 }
 assert.ok((await readdir(resolve(output, 'assets/licenses/rust-stdlib'))).length > 0);
+const audioRoot = resolve(output, 'assets/audio');
+const audioProvenance = JSON.parse(await readFile(resolve(audioRoot, 'PROVENANCE.json'), 'utf8'));
+assert.equal(audioProvenance.schema, 'carlab-historical-audio-provenance-1');
+assert.equal(audioProvenance.status, 'historical-captures-not-current-model-reproducibility');
+assert.deepEqual(audioProvenance.files.map(file => file.file).sort(), (await readdir(audioRoot)).filter(file => file.endsWith('.wav')).sort());
+for (const clip of audioProvenance.files) {
+  assert.match(clip.file, /^[\w-]+\.wav$/);
+  assert.equal(createHash('sha256').update(await readFile(resolve(audioRoot, clip.file))).digest('hex'), clip.sha256, `Historical audio provenance: ${clip.file}`);
+}
 console.log(JSON.stringify({ worker: worker.name, domain: worker.domains[0], files: manifest.files.length, sourceCommit: build.sourceCommit, wasmSha256: build.wasmSha256, status: 'passed' }));
