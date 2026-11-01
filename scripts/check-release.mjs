@@ -16,6 +16,19 @@ assert.equal(worker.previewUrls, false);
 assert.equal(worker.entrypoint, undefined);
 assert.equal(worker.env, undefined);
 const manifest = JSON.parse(await readFile(resolve(root, 'dist/release.json'), 'utf8'));
+async function inventory(directory, prefix = '') {
+  const files = [];
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    const name = prefix ? `${prefix}/${entry.name}` : entry.name;
+    if (entry.isDirectory()) files.push(...await inventory(resolve(directory, entry.name), name));
+    else {
+      assert.ok(entry.isFile(), 'Release assets must be regular files.');
+      files.push(name);
+    }
+  }
+  return files;
+}
+assert.deepEqual((await inventory(resolve(output, 'assets'))).sort(), manifest.files.map(file => file.path).sort(), 'Release asset inventory must match exactly; stale or missing files are rejected.');
 const build = JSON.parse(await readFile(resolve(output, 'assets/build.json'), 'utf8'));
 assert.equal(build.application, 'CarLab');
 assert.match(build.sourceCommit, /^[a-f0-9]{40}$/);
