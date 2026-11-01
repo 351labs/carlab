@@ -1,21 +1,24 @@
 {
-  "scope": "metadata-schema-only",
-  "method": "Schema and model identifiers were renamed; the split fixture hash was recomputed; obsolete run identifiers were removed. Measured point arrays, split membership and legacy numerical cases were not changed. Canonical SHA-256 sorts object keys recursively and uses compact UTF-8 JSON.",
+  "scope": "metadata-schema-and-source-provenance-only",
+  "method": "Schema and model identifiers were renamed; the split fixture hash was recomputed; obsolete run identifiers were removed. Measured point arrays, split membership and legacy numerical cases were not changed. Canonical SHA-256 sorts object keys recursively and uses compact UTF-8 JSON. EPA citation and data-use metadata were corrected; the split fixture hash was recomputed. priorDerivedSha256 preserves the prior migration-stage bytes; originalSha256 remains the pre-migration import.",
   "files": {
     "mazda-measured.json": {
       "originalSha256": "a549a16ad15c497f4e8d586dc44d4651919ee9633bdbf3cf2b9e4cdebb5f282b",
-      "derivedSha256": "943e551ab5e2de9d6c618ed3f661d97daa10755b7ee820fc739932ca98a32f67",
-      "canonicalDataSha256": "884ef55722d4fafe8ad9be888ee7ab8fcee553bbb248fd2be9cb21f48f234bb7"
+      "derivedSha256": "e5a64caeed1f2349c08cdea6b5138b2a929d8cd5955b4b1387a9c5dbfdb78544",
+      "canonicalDataSha256": "884ef55722d4fafe8ad9be888ee7ab8fcee553bbb248fd2be9cb21f48f234bb7",
+      "priorDerivedSha256": "943e551ab5e2de9d6c618ed3f661d97daa10755b7ee820fc739932ca98a32f67"
     },
     "mazda-measured-all.json": {
       "originalSha256": "a5afd72e44b1355464ba1957d2dffad3d45696597b53747223d67b0a045cf2d4",
-      "derivedSha256": "93076ac2d745a9cc89e36a55fec56a8fcd11f69ad73ba732a32c024c9eaadafd",
-      "canonicalDataSha256": "adc97ae08cf968c0019698971b1fb04226e90715e25c854e5284d2219851ef67"
+      "derivedSha256": "b554c5b6f5d46f828a9390cac3c8702d21334ea61748643368a6748eff229bb7",
+      "canonicalDataSha256": "adc97ae08cf968c0019698971b1fb04226e90715e25c854e5284d2219851ef67",
+      "priorDerivedSha256": "93076ac2d745a9cc89e36a55fec56a8fcd11f69ad73ba732a32c024c9eaadafd"
     },
     "mazda-split-model3.json": {
       "originalSha256": "4fdf9624ef37c8bea1d2d33d15f012d96cab8cf7d47e814db554254807cd5a84",
-      "derivedSha256": "6a9fe0d45eafea4e63e70d9a4c8c8b00e8772497933e5b26b724420107bd4d4e",
-      "canonicalDataSha256": "1c75201f7ae07e26b125c078995c8c9ddc95803ff71f9e0f8200313423926b24"
+      "derivedSha256": "da23d8018e3d0b28458a943dc52417f53825dd45a19447248224e51c7031ef8d",
+      "canonicalDataSha256": "1c75201f7ae07e26b125c078995c8c9ddc95803ff71f9e0f8200313423926b24",
+      "priorDerivedSha256": "6a9fe0d45eafea4e63e70d9a4c8c8b00e8772497933e5b26b724420107bd4d4e"
     },
     "legacy-model2-reference.json": {
       "originalSha256": "0089e37f398b6318586f445ac27638834de7e104b44119a6258e33dd87438e91",

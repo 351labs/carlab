@@ -30,7 +30,7 @@ const text=`# First measured-engine comparison: Mazda 2.0 E0
 
 **This supplied report describes the generic model under its recorded conditions.** On 12 predetermined warm steady points, the lab's bounded generic-VE path has **${fmt(report.summary['lab-generic-ve'].torqueNm.mapePercent)}% torque MAPE**, **${fmt(report.summary['lab-generic-ve'].fuelMassFlowGs.mapePercent)}% fuel-flow MAPE** and **${fmt(report.summary['lab-generic-ve'].airMassFlowGs.mapePercent)}% net-inlet-airflow MAPE**. This is an initial conditional discrepancy measurement, not a global fidelity percentage, a calibrated twin, or an engine-tuning recommendation.
 
-The previous [research assessment](ASSESSMENT.md) explains the admission gates. [MAZDA-INPUTS.md](MAZDA-INPUTS.md) documents the exact source, geometry, sensors, measured/calculated fields and missing inputs. The EPA source contains 137 steady points; this campaign scores a **fixed 12-point subset**, not the entire map.
+See [data credits](../../credits.md#3-incorporated-measured-data-and-geometry-context) and the [source fixture](../../validation/mazda-measured.json) for the source, geometry, sensors, measured/calculated fields and missing inputs. The report records the admission gates. The EPA source contains 137 steady points; this campaign scores a **fixed 12-point subset**, not the entire map.
 
 ## What was frozen before the run
 

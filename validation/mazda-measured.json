@@ -17,7 +17,7 @@
     "headerRow": 4,
     "unitsRow": 5,
     "parameterSheet": "Test Parameter List",
-    "suggestedCitation": "SUGGESTED CITATION: 2014 Mazda 2.0L SKYACTIV-G Engine Tier 2 Fuel - Test Data Package. Version 2018-02. Ann Arbor, MI: US EPA, National Vehicle and Fuel Emissions Laboratory, National Center for Advanced Technology, 2018."
+    "suggestedCitation": "SUGGESTED CITATION: 2014 Mazda 2.0L SKYACTIV-G Engine Tier 2 Fuel – Test Data Package. Version 2018-02. Ann Arbor, MI: US EPA, National Vehicle and Fuel Emissions Laboratory, National Center for Advanced Technology, 2018."
   },
   "selection": {
     "declaredBeforeAnyModelOutputs": true,
@@ -1047,8 +1047,8 @@
     }
   ],
   "reuse": {
-    "basis": "EPA benchmarking catalogue invites modeling/analysis; this Mazda package report Discussion and Data Usage states the engine operation and fuel consumption data can be used broadly. No dedicated licence file was seen in the ZIP.",
-    "scope": "Only 12 measured spreadsheet rows plus column metadata, citations and factual engine geometry are retained; no complete map, archive, figure, ECU tuning table or firmware is bundled. Check individual attachment notices before bulk redistribution.",
+    "basis": "The package report Discussion and Data Usage describes the engine operation and fuel consumption data as usable for any purpose in a measurement-quality discussion; it cautions that uncertainty increases at very low loads, particularly below 50 Nm. See credits.md section 3 for the source citation and rights boundary. No dedicated licence file was seen in the ZIP.",
+    "scope": "This fixture retains a 12-row subset and metadata. The companion mazda-measured-all.json retains all 137 rows of the Steady State worksheet, including 26 source columns and parsed aliases. No archive, report figures, other worksheet sweeps, ECU tuning tables or firmware are bundled. Consult credits.md section 3 and attachment-specific notices before further redistribution.",
     "rawPrecision": "rawValues retains the exact numeric text stored in the XLSX XML. Canonical keys parse those values as JSON numbers; scoring should retain adequate floating-point precision.",
     "cautions": [
       "BMEP, BSFC, BTE, injector fuel-flow estimate and cam/overlap channels are explicitly calculated, not independent measurements.",

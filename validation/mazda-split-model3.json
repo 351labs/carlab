@@ -2,7 +2,7 @@
  "schema": "carlab-mazda-split-1",
  "id": "mazda-e0-model3-split-1",
  "fixture": "mazda-measured-all.json",
- "fixtureSha256": "93076ac2d745a9cc89e36a55fec56a8fcd11f69ad73ba732a32c024c9eaadafd",
+ "fixtureSha256": "b554c5b6f5d46f828a9390cac3c8702d21334ea61748643368a6748eff229bb7",
  "frozenBeforeAnyModel3Fit": true,
  "rule": "Band = nominal speed in 1000/1250/1500/1750/2000/2500/3000/3500/4000/4500 within +/-30 rpm of measured Speed; otherwise 'below-1000' (<970 rpm) or 'off-grid'. Training/development = every row in the 1500/2000/3000/4500 rpm bands, which contain all 12 previously inspected rows. Holdout = every other row. Selection uses measured RPM only.",
  "trainingBands": [
