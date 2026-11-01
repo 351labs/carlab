@@ -1,0 +1,186 @@
+{
+ "reviewedBaseline": "a9c5c80da5fc4857902bccd2a6038926d4ff5fb6",
+ "licensingCommitsReviewed": [
+  "31ba8c748727ce7bb8e010535cefa20c1ed68657",
+  "81693645b1729b617e536dc9508df17097c70fc5"
+ ],
+ "wasmBoundaryFuzz": {
+  "job": "carlab-1101-135005-35319",
+  "cases": 57261,
+  "accepted": 19436,
+  "rejectedWithTypedError": 37825,
+  "wasmTraps": 0,
+  "instancesBrickedAfterTrap": 0,
+  "requestsOver1500ms": 0,
+  "nonfiniteOrOver4AudioBlocks": 0,
+  "extraNullCandidates": [
+   {
+    "label": "evaluate physical.ecu.enabled=true",
+    "extraNulls": 9
+   },
+   {
+    "label": "potential engine.boostBar=1e+308",
+    "extraNulls": 1
+   },
+   {
+    "label": "potential engine.boostBar=4294967297",
+    "extraNulls": 1
+   },
+   {
+    "label": "potential physical.assumedPeakPressureBar=-1",
+    "extraNulls": 1
+   },
+   {
+    "label": "potential physical.assumedPeakPressureBar=0",
+    "extraNulls": 1
+   },
+   {
+    "label": "potential physical.assumedPeakPressureBar=-1e+308",
+    "extraNulls": 1
+   },
+   {
+    "label": "potential physical.assumedPeakPressureBar=5e-324",
+    "extraNulls": 1
+   },
+   {
+    "label": "potential physical.assumedPeakPressureBar=1e-300",
+    "extraNulls": 1
+   },
+   {
+    "label": "potential physical.assumedPeakPressureBar=-0.5",
+    "extraNulls": 1
+   },
+   {
+    "label": "potential physical.ecu.enabled=true",
+    "extraNulls": 171
+   },
+   {
+    "label": "sparkToSocFromCa10Delay wiebeEfficiency=0",
+    "extraNulls": 1
+   },
+   {
+    "label": "sparkToSocFromCa10Delay wiebeEfficiency=-1e+308",
+    "extraNulls": 1
+   }
+  ],
+  "nullTriage": {
+   "job": "carlab-1101-135401-48878",
+   "genuine": {
+    "sparkToSocFromCa10Delay(20,50,a=0,2)": null,
+    "sparkToSocFromCa10Delay(20,50,a=-1e308,2)": null,
+    "sparkToSocFromCa10Delay(20,50,a=-1,2)": -7.062787048806751,
+    "sparkToSocFromCa10Delay(20,-50,6.9,2)": 32.400113929248064,
+    "sparkToSocFromCa10Delay(20,50,6.9,m=-1)": 20
+   },
+   "documentedNullable": [
+    "ECU-mode inactive fields (SI vs diesel)",
+    "potential.screenedPeakPower when no candidate passes the clamped peak-pressure screen"
+   ]
+  }
+ },
+ "browserHostileImports": {
+  "job": "carlab-1101-135749-57958",
+  "results": {
+   "library save + hostile import": {
+    "projects": 2,
+    "status": "Biblioteca importada. Os projetos anteriores foram preservados."
+   },
+   "VE map hostile provenance": "Mapas aplicados com a origem declarada no JSON. Os demais par\u00e2metros f\u00edsicos foram preservados.",
+   "material card hostile name": "Nenhuma ficha aplicada. Complete os dados e a origem antes de aplicar.",
+   "ECU CSV hostile id": "ecu.csv carregado; SHA-256 875879cac11eeb5d55a8a7791382b96e0216ad0406a6765fd299cd72c8cc75a4. Confirme a natureza e as condi\u00e7\u00f5es dos pontos.",
+   "config import hostile enums": {
+    "layout": "inline",
+    "perspective": "exhaust",
+    "displacement": 2
+   },
+   "pressure source text": true,
+   "xss outcome": {
+    "xssCounter": 0,
+    "injectedImgX": 0,
+    "literalPayloadShownAsText": true
+   },
+   "audio rapid toggles": {
+    "running": false,
+    "audio": "suspended",
+    "status": "\u00c1udio desligado"
+   },
+   "audio churn while running": {
+    "running": true,
+    "audio": "running",
+    "finite": true,
+    "rpm": 2786.224911569806
+   },
+   "navigate away and back": {
+    "failed": "Navigation timeout of 30000 ms exceeded"
+   },
+   "beforeunload alone keeps model usable": true
+  },
+  "pageErrors": 0,
+  "dialogs": [],
+  "note": "material-card payload was rejected by schema validation before display; goBack timeout is a Puppeteer bfcache lifecycle artifact, see browserBfcache"
+ },
+ "browserBfcache": {
+  "job": "carlab-1101-135938-61103",
+  "out": {
+   "beforeLeave": {
+    "running": true,
+    "audio": "running"
+   },
+   "afterReturn": {
+    "sameDocument": true,
+    "pageshowPersisted": [
+     true
+    ],
+    "navType": "navigate",
+    "running": false,
+    "audio": "suspended",
+    "status": "\u00c1udio desligado"
+   },
+   "powertrainUsable": true,
+   "restart": {
+    "running": true,
+    "audio": "running",
+    "rpm": 2791.0986623045637
+   },
+   "presetAfterRestore": 4
+  },
+  "errors": [],
+  "errorCount": 0
+ },
+ "existingBrowserSuites": {
+  "job": "carlab-1101-135557-52847",
+  "test-workshop": {
+   "checks": 52,
+   "errors": 0,
+   "uploads": 0,
+   "failure": null
+  },
+  "test-browser-v4": {
+   "checks": 30,
+   "errors": 0,
+   "uploads": 0,
+   "failure": null
+  },
+  "test-browser-efi": {
+   "checks": 24,
+   "errors": 0,
+   "uploads": 0,
+   "failure": null
+  },
+  "test-browser-v3": {
+   "checks": 22,
+   "errors": 0,
+   "uploads": 0,
+   "failure": null
+  }
+ },
+ "provenanceHashes": {
+  "canteraNasaGasYamlV3_1_0": "4de6199d65d2d3db782e30573720c723130953707336add59713b02d8667e4db (matches code comment; N2,O2,CO2,H2O,CO,H2 low/high and Ar single range equal exactly)",
+  "canteraLicenseV3_1_0": "469fa95f76e0c652b4f204c2e5d3ffd184dbbb85b2a7fbc75355bee3a16e48e2 (byte-identical to licenses/cantera-BSD-3-Clause.txt)",
+  "apacheLicense2_0": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 (byte-identical to LICENSE)",
+  "epaArchive": "01895c570c01303dccbaa85fced4dcea60177bef0119564f1874e821c202c8a2 (report 63159c55..., workbook 19075910... match fixtures)",
+  "freesoundPreview": "99613b1bcd85cae1b84e661adcf7807797ef18604ad096d6a6644e008d36589a (matches ATTRIBUTION.md)",
+  "liveAndLocalWasm": "6bd40eda5dc7a32be88efea66fdc1d0c1e7dccb4ff923aff62998ec9e16779aa (live build.json, a9c5c80 rebuild and 8169364 rebuild agree)",
+  "v12ClassicRevRegeneratedWithCurrentTsModel5": "60d7fd45... != shipped f45610ea... (759349 of 768000 int16 samples differ)"
+ }
+}
