@@ -41,13 +41,17 @@ carlab_source_commit=$(git rev-parse HEAD)
 rm -rf .cloudflare/output/v0 dist/client
 lm-remote --host local --timeout 12 \
   --pull native/dist --pull api/dist --pull dist --pull .cloudflare/output/v0 \
-  "CARLAB_SOURCE_COMMIT=$carlab_source_commit npm run build"
+  "CARLAB_SOURCE_COMMIT=$carlab_source_commit npm run build && CARLAB_SOURCE_COMMIT=$carlab_source_commit node scripts/check-release.mjs && node scripts/check-binary-paths.mjs native/dist/carlab_engine_lab.wasm"
 lm-remote --host local --gpu --timeout 6 \
-  --pull docs/workshop/proof node test-workshop.mjs
+  --pull output/review-fixes node test-workshop.mjs
 npm run deploy -- --dry-run
 npm run deploy
 ```
 
 The cleanup targets only generated release directories and prevents stale files surviving a runner pull. `scripts/check-release.mjs`, run inside a runner job after the build, verifies the exact Worker/domain, absence of bindings or credential-like asset files, notice files and matching static copies. To check the deployed application, use `CARLAB_TEST_URL=https://carlab.351labs.xyz/` with the browser harness through `lm-remote --host local --gpu`.
+
+The release gate requires an explicit existing source commit, rejects `lm-remote` snapshot commits, compares the committed source tree to the tree being built and rejects uncommitted source changes. The Rust build remaps local directories to virtual source prefixes; the binary path checker verifies the built WASM before release. The development diagnostics hook is available only in development or when the URL explicitly includes `?debug=1`; browser harnesses opt in to that flag.
+
+Historical browser proof files have had their local hostname field redacted for publication. Test outcomes and request/error counts are preserved; this is a privacy edit to the saved metadata, not a rerun or a change to the original result.
 
 These are functional and distribution checks, not reference performance benchmarks or validation of real-engine fidelity. The default physical parameters remain assumptions unless calibrated and independently assessed.

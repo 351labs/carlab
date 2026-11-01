@@ -1,5 +1,5 @@
 {
-  "host": "Davis-MacBook-Pro.local",
+  "host": "local-runner (hostname redacted)",
   "target": "https://carlab.351labs.xyz/",
   "dnsAddressOverride": "104.21.46.251",
   "checks": [

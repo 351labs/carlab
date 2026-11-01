@@ -1,5 +1,5 @@
 {
-  "host": "Davis-MacBook-Pro.local",
+  "host": "local-runner (hostname redacted)",
   "target": "local preview",
   "dnsAddressOverride": null,
   "checks": [
